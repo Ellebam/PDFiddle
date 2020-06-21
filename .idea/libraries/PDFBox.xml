@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="PDFBox">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/debugger/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/examples/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/examples/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/fontbox/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/fontbox/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/pdfbox/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/pdfbox/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/preflight/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/preflight/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/tools/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/tools/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/xmpbox/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../PDFBox/pdfbox-2.0.20/xmpbox/src/test/java" />
+    </SOURCES>
+  </library>
+</component>
