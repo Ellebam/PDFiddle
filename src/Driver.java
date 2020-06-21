@@ -36,7 +36,7 @@ import java.util.List;
 
 public class Driver {
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) {
         Driver driver = new Driver();
         
 
@@ -51,9 +51,9 @@ public class Driver {
     /**
      *This method will turn JPEGs into PDF-Documents. It utilizes a boolean (mergeFiles) to determine wether the JPEGs
      * should be converted into separate PDF-Files or merged into one singular PDF-File
-     * @param listOfJPEGs
-     * @param destinationDirectory
-     * @param mergeFiles
+     * @param listOfJPEGs ArrayList of Files containing the JPEGs to convert
+     * @param destinationDirectory saving directory
+     * @param mergeFiles ArrayList containing Files to merge for mergeDocs()-Method
      */
     public void convertJPEG2PDF(ArrayList<File> listOfJPEGs, String destinationDirectory, Boolean mergeFiles){
        /* boolean mergeFiles =true;
@@ -166,15 +166,16 @@ public class Driver {
      * and an ArrayList with Booleans for determining which pages will have to be removed. The method iterates
      * through the Pages2Remove list until it finds a "true" and then removes it and the page with the same index
      * from the PDF document
-     * @param Doc2RemovePagesFrom
-     * @param destinationDirectory
-     * @param Pages2Remove
+     * @param Doc2RemovePagesFrom Initial PDF-File to remove pages from
+     * @param destinationDirectory saving directory
+     * @param Pages2Remove ArrayList containing booleans for pages to remove(true)
      */
     public void removePagesFromPDF(File Doc2RemovePagesFrom, String destinationDirectory,
                                    ArrayList<Boolean> Pages2Remove){
 
 
-        /*ArrayList<Boolean> Pages2Remove = new ArrayList<>();
+        /*Unit Testing:
+        ArrayList<Boolean> Pages2Remove = new ArrayList<>();
         Pages2Remove.add(true);
         for(int i =0; i<9;i++){
             Pages2Remove.add(false);
