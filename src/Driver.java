@@ -12,6 +12,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -24,6 +25,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 import javax.imageio.ImageIO;
+import javax.print.Doc;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -38,11 +40,55 @@ public class Driver {
 
     public static void main(String[] args) {
         Driver driver = new Driver();
-        
 
 
 
 
+
+    }
+
+    public void decryptPDF(File Doc2Decrypt, Boolean overwriteSourceFile){
+        try{
+            Driver temporalDriver = new Driver();
+            try{
+                PDDocument PDF2Decrypt = PDDocument.load(Doc2Decrypt);
+                JOptionPane.showMessageDialog(null, "Document not encrypted!");
+            }catch(InvalidPasswordException invalidPasswordException){
+                PDDocument PDF2Decrypt = PDDocument.load(Doc2Decrypt,
+                        JOptionPane.showInputDialog(null,
+                                Doc2Decrypt.getName()+" is password protected. " +
+                                        "Please enter the password to open the document"));
+                PDF2Decrypt.setAllSecurityToBeRemoved(true);
+                if(overwriteSourceFile){
+                    PDF2Decrypt.save(Doc2Decrypt.getAbsolutePath());
+                }else{
+                    PDF2Decrypt.save(temporalDriver.chooseSaveDirectory()+"\\DecryptedPDF.pdf");
+                }
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Error while decrypting!");
+        }
+    }
+
+    public void encryptPDF(File Doc2Encrypt, Boolean overwriteSourceFile, String authorPassword, String userPassword){
+        try {
+            Driver tempoDriver = new Driver();
+            PDDocument PDF2Encrypt = PDDocument.load(Doc2Encrypt);
+            AccessPermission accessPermission = new AccessPermission();
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(authorPassword,userPassword,accessPermission);
+            spp.setEncryptionKeyLength(128);
+            spp.setPermissions(accessPermission);
+            PDF2Encrypt.protect(spp);
+            if(overwriteSourceFile){
+                PDF2Encrypt.save(Doc2Encrypt.getAbsolutePath());
+            }else{
+                PDF2Encrypt.save(tempoDriver.chooseSaveDirectory()+"\\EncryptedPDF.pdf");
+            }
+            PDF2Encrypt.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
@@ -146,6 +192,7 @@ public class Driver {
 
         driver.convertPDF2JPEGs(driver.chooseDoc(),driver.chooseSaveDirectory(),Pages2Convert,400);*/
         try{
+            try{
             PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG, MemoryUsageSetting.setupTempFileOnly());
             int numberOfPages = extractionPDF.getNumberOfPages();
             PDFRenderer renderer = new PDFRenderer(extractionPDF);
@@ -157,6 +204,23 @@ public class Driver {
                 }
             }
             extractionPDF.close();
+            }catch(InvalidPasswordException invalidPasswordException){
+                PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG,
+                        JOptionPane.showInputDialog(null,
+                                Doc2Convert2JPEG.getName()+" is password protected. " +
+                                        "Please enter the password to open the document"),
+                                MemoryUsageSetting.setupTempFileOnly());
+                int numberOfPages = extractionPDF.getNumberOfPages();
+                System.out.println(numberOfPages);
+                PDFRenderer renderer = new PDFRenderer(extractionPDF);
+                for(int i=0; i < numberOfPages;i++){
+                    if(Pages2Convert.get(i)){
+                        BufferedImage  image = renderer.renderImageWithDPI(i,DPI,ImageType.RGB);
+                        ImageIO.write(image,"JPEG",new File(
+                                destinationDirectory+"\\converted Image"+i+".jpeg"));
+                    }
+                }
+                extractionPDF.close();}
         }catch(Exception ex){ex.printStackTrace();}
 
     }
@@ -173,7 +237,6 @@ public class Driver {
     public void removePagesFromPDF(File Doc2RemovePagesFrom, String destinationDirectory,
                                    ArrayList<Boolean> Pages2Remove){
 
-
         /*Unit Testing:
         ArrayList<Boolean> Pages2Remove = new ArrayList<>();
         Pages2Remove.add(true);
@@ -188,6 +251,7 @@ public class Driver {
 
         driver.removePagesFromPDF(driver.chooseDoc(),driver.chooseSaveDirectory(),Pages2Remove);*/
         try{
+            try{
             PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom);
             int numberOfPages = pageRemovalPDF.getNumberOfPages();
             System.out.println(numberOfPages);
@@ -202,6 +266,24 @@ public class Driver {
                 }
             }
             pageRemovalPDF.save(destinationDirectory+"\\PagesRemoved.pdf");
+            }catch(InvalidPasswordException invalidPasswordException) {
+                PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom,
+                        JOptionPane.showInputDialog(null,
+                                Doc2RemovePagesFrom.getName() + " is password protected. " +
+                                        "Please enter the password to open the document"));
+                int numberOfPages = pageRemovalPDF.getNumberOfPages();
+                System.out.println(numberOfPages);
+                while (Pages2Remove.contains(true)) {
+                    for (int i = 0; i < numberOfPages; i++) {
+                        if (Pages2Remove.get(i)) {
+                            pageRemovalPDF.removePage(i);
+                            Pages2Remove.remove(i);
+
+                            break;
+                        }
+                    }
+                }
+            }
         }catch (Exception ex){ex.printStackTrace();}
     }
 
@@ -217,6 +299,7 @@ public class Driver {
 
 
         try {
+            try{
         PDDocument pdDocument = new PDDocument();
         PDDocument oDocument = PDDocument.load(Doc2Compress);
         PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
@@ -238,6 +321,29 @@ public class Driver {
         //File compressedFile = new File(destinationDirectory + "_cpmpressed" + ".pdf");
         pdDocument.save(destinationDirectory+"\\compressedFile.pdf");
         pdDocument.close();
+            }catch(InvalidPasswordException invalidPasswordException) {
+                PDDocument pdDocument = new PDDocument();
+                PDDocument oDocument = PDDocument.load(Doc2Compress,
+                        JOptionPane.showInputDialog(null,
+                                Doc2Compress.getName() + " is password protected. " +
+                                        "Please enter the password to open the document"));
+                PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
+                int numberOfPages = oDocument.getNumberOfPages();
+                PDPage page = null;
+
+                for (int i = 0; i < numberOfPages; i++) {
+                    page = new PDPage(PDRectangle.LETTER);
+                    BufferedImage bim = pdfRenderer.renderImageWithDPI(i, compressionDPI, ImageType.RGB);
+                    PDImageXObject pdImage = JPEGFactory.createFromImage(pdDocument, bim);
+                    PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page);
+                    float newHeight = PDRectangle.LETTER.getHeight();
+                    float newWidth = PDRectangle.LETTER.getWidth();
+                    contentStream.drawImage(pdImage, 0, 0, newWidth, newHeight);
+                    contentStream.close();
+
+                    pdDocument.addPage(page);
+                }
+            }
 
 
     } catch (IOException e) {
@@ -255,7 +361,6 @@ public class Driver {
      */
     public void splitPDFDocs (String destinationDirectory, File Doc2Split, ArrayList<Integer> splitPointList){
 
-
         /*ArrayList<Integer> splitPointList = new ArrayList<>();
         splitPointList.add(0);
         splitPointList.add(1);
@@ -264,32 +369,27 @@ public class Driver {
         driver.splitPDFDocs(directory,driver.chooseDoc(),splitPointList);*/
         
         try{
-            //splitter to split the PDF in singular PDF Files
+            /**splitter to split the PDF in singular PDF Files*/
             PDDocument document = PDDocument.load(Doc2Split);
             Splitter splitter = new Splitter();
             List<PDDocument> Pages = splitter.split(document);
             Iterator<PDDocument> iterator = Pages.listIterator();
-
 
             if (splitPointList.size()<1) {
                 int i = 1;
                 while (iterator.hasNext()) {
                     PDDocument temporalDocument = iterator.next();
                     temporalDocument.save(destinationDirectory + i++ + ".pdf");
-
                 }
                 document.close();
             }else{
-
                 int i = 0;
-
                 while (iterator.hasNext()) {
                     PDDocument temporalDocument = iterator.next();
                     temporalDocument.save(destinationDirectory + i++ + ".pdf");
                 }
                 i=0;
                     for (int u = 0; u < splitPointList.size()-1;u++){
-
                         ArrayList<File> mergeList = new ArrayList<>();
                         for( int h = 0; h< (splitPointList.get(u+1)-splitPointList.get(u));h++){
                             System.out.println("U="+u);
@@ -341,13 +441,13 @@ public ArrayList<File> addDocs2MergeList (ArrayList<File> mergeList, File file2A
         return mergeList;
     }
 public File chooseDoc(){
-        JFileChooser fileChoose = new JFileChooser("C:\\Arinhobag\\Code\\Java\\IntelliJ\\PDFiddle");
+        JFileChooser fileChoose = new JFileChooser("C:\\Arinhobag");
         fileChoose.showOpenDialog(null);
         return fileChoose.getSelectedFile();
 }
 
 public String chooseSaveDirectory (/*Frame frame*/){
-    JFileChooser fileSave = new JFileChooser("C:\\Arinhobag\\Code\\Java\\IntelliJ\\PDFiddle");
+    JFileChooser fileSave = new JFileChooser("C:\\Arinhobag");
     fileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     fileSave.showOpenDialog(/*frame*/ null);
     return fileSave.getSelectedFile().getAbsolutePath();
