@@ -304,7 +304,7 @@ public class Driver {
         PDDocument oDocument = PDDocument.load(Doc2Compress);
         PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
         int numberOfPages = oDocument.getNumberOfPages();
-        PDPage page = null;
+        PDPage page;
 
         for (int i = 0; i < numberOfPages; i++) {
             page = new PDPage(PDRectangle.LETTER);
@@ -329,7 +329,7 @@ public class Driver {
                                         "Please enter the password to open the document"));
                 PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
                 int numberOfPages = oDocument.getNumberOfPages();
-                PDPage page = null;
+                PDPage page;
 
                 for (int i = 0; i < numberOfPages; i++) {
                     page = new PDPage(PDRectangle.LETTER);
@@ -359,7 +359,7 @@ public class Driver {
      * @param Doc2Split the Document which has to be split
      * @param splitPointList ArrayList which takes the Page-Points at which the Document has to be split
      */
-    public void splitPDFDocs (String destinationDirectory, File Doc2Split, ArrayList<Integer> splitPointList){
+    public void splitPDFDocs (String destinationDirectory, File Doc2Split, ArrayList<Integer> splitPointList) {
 
         /*ArrayList<Integer> splitPointList = new ArrayList<>();
         splitPointList.add(0);
@@ -367,54 +367,102 @@ public class Driver {
         splitPointList.add(6);
         String directory =("C:\\Arinhobag\\Code\\Java\\IntelliJ\\PDFiddle\\newAge");
         driver.splitPDFDocs(directory,driver.chooseDoc(),splitPointList);*/
-        
-        try{
-            /**splitter to split the PDF in singular PDF Files*/
-            PDDocument document = PDDocument.load(Doc2Split);
-            Splitter splitter = new Splitter();
-            List<PDDocument> Pages = splitter.split(document);
-            Iterator<PDDocument> iterator = Pages.listIterator();
 
-            if (splitPointList.size()<1) {
-                int i = 1;
-                while (iterator.hasNext()) {
-                    PDDocument temporalDocument = iterator.next();
-                    temporalDocument.save(destinationDirectory + i++ + ".pdf");
-                }
-                document.close();
-            }else{
-                int i = 0;
-                while (iterator.hasNext()) {
-                    PDDocument temporalDocument = iterator.next();
-                    temporalDocument.save(destinationDirectory + i++ + ".pdf");
-                }
-                i=0;
-                    for (int u = 0; u < splitPointList.size()-1;u++){
+        try {
+            try {
+                //splitter to split the PDF in singular PDF Files
+                PDDocument document = PDDocument.load(Doc2Split);
+                Splitter splitter = new Splitter();
+                List<PDDocument> Pages = splitter.split(document);
+                Iterator<PDDocument> iterator = Pages.listIterator();
+
+                if (splitPointList.size() < 1) {
+                    int i = 1;
+                    while (iterator.hasNext()) {
+                        PDDocument temporalDocument = iterator.next();
+                        temporalDocument.save(destinationDirectory + i++ + ".pdf");
+                    }
+                    document.close();
+                } else {
+                    int i = 0;
+                    while (iterator.hasNext()) {
+                        PDDocument temporalDocument = iterator.next();
+                        temporalDocument.save(destinationDirectory + i++ + ".pdf");
+                    }
+                    i = 0;
+                    for (int u = 0; u < splitPointList.size() - 1; u++) {
                         ArrayList<File> mergeList = new ArrayList<>();
-                        for( int h = 0; h< (splitPointList.get(u+1)-splitPointList.get(u));h++){
-                            System.out.println("U="+u);
-                            File temporalFile = new File(destinationDirectory+i+".pdf");
+                        for (int h = 0; h < (splitPointList.get(u + 1) - splitPointList.get(u)); h++) {
+                            System.out.println("U=" + u);
+                            File temporalFile = new File(destinationDirectory + i + ".pdf");
                             mergeList.add(temporalFile);
                             i++;
                         }
-                        int x = u+1;
-                        mergePDFDocs(destinationDirectory+"Nr"+x +".pdf",mergeList);
-                        System.out.println("Number "+x+" of new documents created");
-                }
-                    for(int z = (splitPointList.get(splitPointList.size()-1))-1; z>-1;z--) {
+                        int x = u + 1;
+                        mergePDFDocs(destinationDirectory + "Nr" + x + ".pdf", mergeList);
+                        System.out.println("Number " + x + " of new documents created");
+                    }
+                    for (int z = (splitPointList.get(splitPointList.size() - 1)) - 1; z > -1; z--) {
                         //this part deletes the singular files which have to be created by the splitter
                         File definitiveFile = new File(destinationDirectory + z + ".pdf");
                         if (definitiveFile.delete()) {
                             System.out.println(destinationDirectory + z + ".pdf deleted");
                         } else System.out.println(destinationDirectory + z + ".pdf not deleted");
                     }
-                document.close();
+                    document.close();
 
                 }
+            } catch (InvalidPasswordException invalidPasswordException) {
+
+                PDDocument document = PDDocument.load(Doc2Split,
+                        JOptionPane.showInputDialog(null,
+                                Doc2Split.getName() + " is password protected. " +
+                                        "Please enter the password to open the document"));
+                Splitter splitter = new Splitter();
+                List<PDDocument> Pages = splitter.split(document);
+                Iterator<PDDocument> iterator = Pages.listIterator();
+
+                if (splitPointList.size() < 1) {
+                    int i = 1;
+                    while (iterator.hasNext()) {
+                        PDDocument temporalDocument = iterator.next();
+                        temporalDocument.save(destinationDirectory + i++ + ".pdf");
+                    }
+                    document.close();
+                } else {
+                    int i = 0;
+                    while (iterator.hasNext()) {
+                        PDDocument temporalDocument = iterator.next();
+                        temporalDocument.save(destinationDirectory + i++ + ".pdf");
+                    }
+                    i = 0;
+                    for (int u = 0; u < splitPointList.size() - 1; u++) {
+                        ArrayList<File> mergeList = new ArrayList<>();
+                        for (int h = 0; h < (splitPointList.get(u + 1) - splitPointList.get(u)); h++) {
+                            System.out.println("U=" + u);
+                            File temporalFile = new File(destinationDirectory + i + ".pdf");
+                            mergeList.add(temporalFile);
+                            i++;
+                        }
+                        int x = u + 1;
+                        mergePDFDocs(destinationDirectory + "Nr" + x + ".pdf", mergeList);
+                        System.out.println("Number " + x + " of new documents created");
+                    }
+                    for (int z = (splitPointList.get(splitPointList.size() - 1)) - 1; z > -1; z--) {
+                        //this part deletes the singular files which have to be created by the splitter
+                        File definitiveFile = new File(destinationDirectory + z + ".pdf");
+                        if (definitiveFile.delete()) {
+                            System.out.println(destinationDirectory + z + ".pdf deleted");
+                        } else System.out.println(destinationDirectory + z + ".pdf not deleted");
+                    }
+                    document.close();
 
 
-        }catch(Exception ex){ex.printStackTrace();}
-}
+                }
+            }
+        }catch (Exception ex) {ex.printStackTrace();}
+        }
+
 
 
     /**
