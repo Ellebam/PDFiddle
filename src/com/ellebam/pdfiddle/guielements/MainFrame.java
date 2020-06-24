@@ -21,6 +21,7 @@ public class MainFrame extends JFrame {
     public void setAndAddCurrentPanel(JPanel currentPanel) {
         this.currentMainPanel = currentPanel;
         mainFrame.getContentPane().add(BorderLayout.CENTER, currentMainPanel);
+        currentPanel.revalidate();
     }
 
 
