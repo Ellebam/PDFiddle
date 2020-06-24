@@ -1,38 +1,27 @@
-import com.sun.imageio.plugins.jpeg.JPEG;
-import org.apache.pdfbox.cos.COSInputStream;
-import org.apache.pdfbox.cos.COSName;
+package com.ellebam.pdfiddle.driver;
+
+import com.ellebam.pdfiddle.guielements.MainFrame;
+import com.ellebam.pdfiddle.guielements.OpeningPanel;
 import org.apache.pdfbox.io.MemoryUsageSetting;
-import org.apache.pdfbox.jbig2.Bitmap;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.pdfbox.text.PDFTextStripper;
 
 import javax.imageio.ImageIO;
-import javax.print.Doc;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,10 +29,18 @@ public class Driver {
 
     public static void main(String[] args) {
         Driver driver = new Driver();
+        driver.buildGui();
 
 
 
 
+
+
+    }
+
+    public void buildGui(){
+        MainFrame mainFrame = new MainFrame();
+        mainFrame.setAndAddCurrentPanel(new OpeningPanel());
 
     }
 
