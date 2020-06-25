@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SmallLabel extends JLabel {
-    private Font smallLabelFont = new Font("Arial",Font.PLAIN,8);
+    private Font smallLabelFont = new Font("Arial",Font.PLAIN,15);
     private SmallLabel smallLabel;
 
     public SmallLabel(String labelText){

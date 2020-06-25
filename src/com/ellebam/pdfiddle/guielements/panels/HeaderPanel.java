@@ -9,6 +9,7 @@ public class HeaderPanel extends JPanel {
 
     public HeaderPanel (HeaderLabel headerLabel){
         headerPanel = this;
+        headerPanel.setOpaque(false);
         headerPanel.add(headerLabel);
     }
 }
