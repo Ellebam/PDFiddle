@@ -16,12 +16,16 @@ public class OpeningPanelPseudoButton extends JPanel {
     protected int shadowGap = 5;
     protected int shadowOffset = 4;
     protected int shadowAlpha = 150;
+    protected Color color = new Color(246,195,36);
+
 
     public OpeningPanelPseudoButton(SmallLabelPanel smallLabelPanel) {
         super();
         setOpaque(false);
         openingPanelPseudoButton = this;
         openingPanelPseudoButton.add(smallLabelPanel);
+        openingPanelPseudoButton.setPreferredSize(new Dimension(65, 65));
+        openingPanelPseudoButton.setBackground(color);
     }
 
     @Override

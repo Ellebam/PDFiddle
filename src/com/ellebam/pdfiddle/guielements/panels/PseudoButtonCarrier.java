@@ -5,16 +5,24 @@ import java.awt.*;
 
 public class PseudoButtonCarrier extends JPanel {
     private PseudoButtonCarrier pseudoButtonCarrier;
-    protected Color color =Color.BLUE;
+    protected Color color = new Color(4,118,208);
     protected Dimension arcs = new Dimension(20,20);
-    protected Dimension dimension = new Dimension (200,100);
+    protected Dimension dimension = new Dimension (250,150);
 
     public PseudoButtonCarrier(MiddleLabelPanel middleLabelPanel,
                                OpeningPanelPseudoButton openingPanelPseudoButton){
         pseudoButtonCarrier  = this;
         pseudoButtonCarrier.setLayout(new BoxLayout(pseudoButtonCarrier, BoxLayout.Y_AXIS));
+        pseudoButtonCarrier.add(Box.createRigidArea(new Dimension(0,10)));
         pseudoButtonCarrier.add(middleLabelPanel);
-        pseudoButtonCarrier.add(openingPanelPseudoButton);
+        JPanel fakePanel = new JPanel();
+        fakePanel.setLayout(new BoxLayout(fakePanel,BoxLayout.X_AXIS));
+        fakePanel.add(Box.createHorizontalGlue());
+        fakePanel.add(openingPanelPseudoButton);
+        fakePanel.add(Box.createHorizontalGlue());
+        fakePanel.setOpaque(false);
+        pseudoButtonCarrier.add(fakePanel);
+        pseudoButtonCarrier.setOpaque(false);
         pseudoButtonCarrier.setPreferredSize(dimension);
     }
 
@@ -23,6 +31,7 @@ public class PseudoButtonCarrier extends JPanel {
                                OpeningPanelPseudoButton openingPanelPseudoButton2){
         pseudoButtonCarrier  = this;
         pseudoButtonCarrier.setLayout(new BoxLayout(pseudoButtonCarrier, BoxLayout.Y_AXIS));
+        pseudoButtonCarrier.add(Box.createRigidArea(new Dimension(0,10)));
         pseudoButtonCarrier.add(middleLabelPanel);
 
         JPanel fakePanel = new JPanel();
@@ -33,6 +42,7 @@ public class PseudoButtonCarrier extends JPanel {
         fakePanel.setOpaque(false);
 
         pseudoButtonCarrier.add(fakePanel);
+        pseudoButtonCarrier.setOpaque(false);
         pseudoButtonCarrier.setPreferredSize(dimension);
 
     }
