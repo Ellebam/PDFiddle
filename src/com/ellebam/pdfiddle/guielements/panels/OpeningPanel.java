@@ -16,9 +16,13 @@ public class OpeningPanel extends JPanel {
         openingPanel = this;
 
         openingPanel.setLayout(new BoxLayout(openingPanel, BoxLayout.Y_AXIS));
-        openingPanel.add(Box.createRigidArea(new Dimension(10,50)));
-        openingPanel.add(new HeaderPanel(new HeaderLabel("Welcome to PDFiddle 1.0")));
+        openingPanel.add(Box.createRigidArea(new Dimension(0,20)));
         openingPanel.setBackground(Color.WHITE);
+
+
+
+        HeaderPanel headerPanel =new HeaderPanel(new HeaderLabel("Welcome to PDFiddle 1.0"));
+        headerPanel.setPreferredSize(new Dimension(2000,30));
 
         //PseudoButtonCarrier for merge & split PDF Pseudobuttons
         SmallLabelPanel splitSmallLabelPanel = new SmallLabelPanel(new SmallLabel("PDF-Splitter"));
@@ -56,17 +60,32 @@ public class OpeningPanel extends JPanel {
         PseudoButtonCarrier JPEGCenterCarrier = new PseudoButtonCarrier(JPEGCenterLabelPanel,
                 JPEG2PDFPseudoButton,PDF2JPEGPseudoButton);
 
+        //PseudoButtonCarrier for encryptPDF and decryptPDF Pseudobuttons
+        SmallLabelPanel encryptPDFSmallLabelPanel = new SmallLabelPanel(new SmallLabel("Encrypt PDF"));
+        OpeningPanelPseudoButton encryptPDFPseudoButton = new OpeningPanelPseudoButton(encryptPDFSmallLabelPanel);
+        SmallLabelPanel decryptPDFSmallLabelPanel = new SmallLabelPanel(new SmallLabel("Decrypt JPEG"));
+        OpeningPanelPseudoButton decryptPDFPseudoButton = new OpeningPanelPseudoButton(decryptPDFSmallLabelPanel);
+        MiddleLabel encryptionLabel = new MiddleLabel("Encryption");
+        MiddleLabelPanel encryptionLabelPanel = new MiddleLabelPanel(encryptionLabel);
+        PseudoButtonCarrier encryptionCarrier = new PseudoButtonCarrier(encryptionLabelPanel,
+                encryptPDFPseudoButton,decryptPDFPseudoButton);
+
 
         JPanel carrierPanel = new JPanel();
-        carrierPanel.setOpaque(false);
+        carrierPanel.setOpaque(true);
         carrierPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10,20));
+        carrierPanel.add(headerPanel);
         carrierPanel.add(mergeAndSplitCarrier);
         carrierPanel.add(compressCarrier);
         carrierPanel.add(pageRemoverCarrier);
         carrierPanel.add(JPEGCenterCarrier);
+        carrierPanel.add(encryptionCarrier);
+        carrierPanel.setBackground(Color.white);
+        carrierPanel.add(Box.createVerticalGlue());
 
 
         openingPanel.add(carrierPanel);
+
         openingPanel.setVisible(true);
 
     }
