@@ -4,11 +4,15 @@ import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import com.ellebam.pdfiddle.guielements.labels.MiddleLabel;
 import com.ellebam.pdfiddle.guielements.labels.SmallLabel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class OpeningPanel extends JPanel {
     private JPanel openingPanel;
+
 
 
 
@@ -33,6 +37,12 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel mergeAndSplitLabelPanel = new MiddleLabelPanel(mergeAndSplitLabel);
         PseudoButtonCarrier mergeAndSplitCarrier = new PseudoButtonCarrier(mergeAndSplitLabelPanel,
                 mergePseudoButton,splitPseudoButton);
+        //setting the icons for merge & split PDF Pseudobuttons
+        try {
+            BufferedImage mergePDFIconPNG = ImageIO.read(getClass().getResource("/com/ellebam/pdfiddle/Icons/Freepik/mergePDF_Icon.png"));
+            JLabel mergePDFIconLabel = new JLabel(new ImageIcon(mergePDFIconPNG));
+            mergePseudoButton.add(mergePDFIconLabel);
+        }catch(Exception ex){ex.printStackTrace();}
 
         //PseudoButtonCarrier for compressPDF Pseudobutton
         SmallLabelPanel compressSmallLabelPanel = new SmallLabelPanel(new SmallLabel("PDF-Compressor"));
@@ -69,6 +79,7 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel encryptionLabelPanel = new MiddleLabelPanel(encryptionLabel);
         PseudoButtonCarrier encryptionCarrier = new PseudoButtonCarrier(encryptionLabelPanel,
                 encryptPDFPseudoButton,decryptPDFPseudoButton);
+
 
 
         JPanel carrierPanel = new JPanel();
