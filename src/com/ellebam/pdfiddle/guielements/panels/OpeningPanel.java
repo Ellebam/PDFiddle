@@ -37,12 +37,10 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel mergeAndSplitLabelPanel = new MiddleLabelPanel(mergeAndSplitLabel);
         PseudoButtonCarrier mergeAndSplitCarrier = new PseudoButtonCarrier(mergeAndSplitLabelPanel,
                 mergePseudoButton,splitPseudoButton);
-        //setting the icons for merge & split PDF Pseudobuttons
-        try {
-            BufferedImage mergePDFIconPNG = ImageIO.read(getClass().getResource("/com/ellebam/pdfiddle/Icons/Freepik/mergePDF_Icon.png"));
-            JLabel mergePDFIconLabel = new JLabel(new ImageIcon(mergePDFIconPNG));
-            mergePseudoButton.add(mergePDFIconLabel);
-        }catch(Exception ex){ex.printStackTrace();}
+        addIcon2Pseudobutton(mergePseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/mergePDF_Icon.png");
+        addIcon2Pseudobutton(splitPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/splitPDF_Icon.png");
+
+
 
         //PseudoButtonCarrier for compressPDF Pseudobutton
         SmallLabelPanel compressSmallLabelPanel = new SmallLabelPanel(new SmallLabel("PDF-Compressor"));
@@ -51,6 +49,7 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel compressLabelPanel = new MiddleLabelPanel(compressLabel);
         PseudoButtonCarrier compressCarrier = new PseudoButtonCarrier(compressLabelPanel,
                 compressPseudoButton);
+        addIcon2Pseudobutton(compressPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/compressPDF_Icon.png");
 
         //PseudoButtonCarrier for removePagesPDF Pseudobutton
         SmallLabelPanel pageRemoverSmallLabelPanel = new SmallLabelPanel(new SmallLabel("Page Remover"));
@@ -59,6 +58,7 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel pageRemoverLabelPanel = new MiddleLabelPanel(pageRemoverLabel);
         PseudoButtonCarrier pageRemoverCarrier = new PseudoButtonCarrier(pageRemoverLabelPanel,
                 pageRemoverPseudoButton);
+        addIcon2Pseudobutton(pageRemoverPseudoButton,"/com/ellebam/pdfiddle/Icons/Own Icons/pageRemoval_icon.png");
 
         //PseudoButtonCarrier for JPEG2PDF and PDF2JPEG Pseudobuttons
         SmallLabelPanel JPEG2PDFSmallLabelPanel = new SmallLabelPanel(new SmallLabel("JPEG to PDF"));
@@ -69,6 +69,8 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel JPEGCenterLabelPanel = new MiddleLabelPanel(JPEGCenterLabel);
         PseudoButtonCarrier JPEGCenterCarrier = new PseudoButtonCarrier(JPEGCenterLabelPanel,
                 JPEG2PDFPseudoButton,PDF2JPEGPseudoButton);
+        addIcon2Pseudobutton(JPEG2PDFPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/JPEG2PDF_Icon.png");
+        addIcon2Pseudobutton(PDF2JPEGPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/PDF2JPEG_Icon.png");
 
         //PseudoButtonCarrier for encryptPDF and decryptPDF Pseudobuttons
         SmallLabelPanel encryptPDFSmallLabelPanel = new SmallLabelPanel(new SmallLabel("Encrypt PDF"));
@@ -79,6 +81,8 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel encryptionLabelPanel = new MiddleLabelPanel(encryptionLabel);
         PseudoButtonCarrier encryptionCarrier = new PseudoButtonCarrier(encryptionLabelPanel,
                 encryptPDFPseudoButton,decryptPDFPseudoButton);
+        addIcon2Pseudobutton(encryptPDFPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/encryptPDF_Icon.png");
+        addIcon2Pseudobutton(decryptPDFPseudoButton,"/com/ellebam/pdfiddle/Icons/Own Icons/decryptPDF_icon.png");
 
 
 
@@ -99,5 +103,32 @@ public class OpeningPanel extends JPanel {
 
         openingPanel.setVisible(true);
 
+    }
+
+    public ImageIcon scaleImage (ImageIcon icon, int width, int height){
+        int newWidth = icon.getIconWidth();
+        int newHeight = icon.getIconHeight();
+
+        if(icon.getIconWidth()>width){
+            newWidth = width;
+            newHeight = (newWidth*icon.getIconHeight())/icon.getIconWidth();
+        }
+
+        if(newHeight>height){
+            newHeight=height;
+            newWidth=(icon.getIconWidth()*newHeight/icon.getIconHeight());
+        }
+
+        return new ImageIcon(icon.getImage().getScaledInstance(newWidth,newHeight,Image.SCALE_DEFAULT));
+    }
+    public void addIcon2Pseudobutton (OpeningPanelPseudoButton pseudobutton, String iconDirectory) {
+        try {
+            BufferedImage IconPNG = ImageIO.read(getClass().getResource(iconDirectory));
+            ImageIcon icon = new ImageIcon(IconPNG);
+            JLabel iconLabel = new JLabel(scaleImage(icon, 50, 50));
+            pseudobutton.add(iconLabel);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

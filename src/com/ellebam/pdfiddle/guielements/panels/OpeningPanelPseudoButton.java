@@ -25,7 +25,8 @@ public class OpeningPanelPseudoButton extends JPanel {
         openingPanelPseudoButton = this;
         openingPanelPseudoButton.add(smallLabelPanel);
         openingPanelPseudoButton.setPreferredSize(new Dimension(65, 65));
-        openingPanelPseudoButton.setBackground(color);
+        openingPanelPseudoButton.setBackground(Color.LIGHT_GRAY);
+
     }
 
     @Override
