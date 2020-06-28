@@ -1,6 +1,7 @@
 package com.ellebam.pdfiddle.driver;
 
 import com.ellebam.pdfiddle.guielements.MainFrame;
+import com.ellebam.pdfiddle.guielements.panels.MergePDFPanel;
 import com.ellebam.pdfiddle.guielements.panels.OpeningPanel;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -40,7 +41,7 @@ public class Driver {
 
     public void buildGui(){
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new OpeningPanel());
+        mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
 
     }
 

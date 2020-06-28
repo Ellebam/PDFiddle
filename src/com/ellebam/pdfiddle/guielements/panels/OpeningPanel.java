@@ -1,5 +1,7 @@
 package com.ellebam.pdfiddle.guielements.panels;
 
+import com.ellebam.pdfiddle.driver.Driver;
+import com.ellebam.pdfiddle.guielements.MainFrame;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import com.ellebam.pdfiddle.guielements.labels.MiddleLabel;
 import com.ellebam.pdfiddle.guielements.labels.SmallLabel;
@@ -7,16 +9,27 @@ import com.ellebam.pdfiddle.guielements.labels.SmallLabel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * First Panel to appear when the program (and thus the mainFrame) is started. It shows OpeningPanelPseudobuttons (JPanels)
+ * which will lead to the desired functionality when clicked.
+ */
 public class OpeningPanel extends JPanel {
-    private JPanel openingPanel;
+    private OpeningPanel openingPanel;
+    private Driver driver = new Driver();
 
 
-
-
-    public OpeningPanel(){
+    /**
+     * Constructor for creation of OpeningPanel. It takes a MainFrame object as argument for changing fo the Panel when
+     * a OpeningPanelPseudobutton is clicked
+     *
+     * @param mainFrame Parent of OpeningPanel
+     */
+    public OpeningPanel(MainFrame mainFrame){
         openingPanel = this;
 
         openingPanel.setLayout(new BoxLayout(openingPanel, BoxLayout.Y_AXIS));
@@ -37,8 +50,21 @@ public class OpeningPanel extends JPanel {
         MiddleLabelPanel mergeAndSplitLabelPanel = new MiddleLabelPanel(mergeAndSplitLabel);
         PseudoButtonCarrier mergeAndSplitCarrier = new PseudoButtonCarrier(mergeAndSplitLabelPanel,
                 mergePseudoButton,splitPseudoButton);
+
+        //adding icons
         addIcon2Pseudobutton(mergePseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/mergePDF_Icon.png");
         addIcon2Pseudobutton(splitPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/splitPDF_Icon.png");
+
+        //adding Mouselisteners (opening corresponding new Panel)
+        mergePseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseClicked (MouseEvent e){
+                super.mouseClicked(e);
+                openingPanel.setVisible(false);
+                mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
+            }
+        }));
+
 
 
 
@@ -105,6 +131,13 @@ public class OpeningPanel extends JPanel {
 
     }
 
+    /**
+     * Constructor for scaling the OpeningPanelPseudoButtons Icons to desired dimension without losing the aspect ratio
+     * @param icon icon object to resize
+     * @param width desired width of icon
+     * @param height desired height of icon
+     * @return resized icon
+     */
     public ImageIcon scaleImage (ImageIcon icon, int width, int height){
         int newWidth = icon.getIconWidth();
         int newHeight = icon.getIconHeight();
@@ -121,6 +154,12 @@ public class OpeningPanel extends JPanel {
 
         return new ImageIcon(icon.getImage().getScaledInstance(newWidth,newHeight,Image.SCALE_DEFAULT));
     }
+
+    /**
+     * Method for combining a PNG File from source (icon) with the corresponding OpeningPanelPseudoButton
+     * @param pseudobutton corresponding OpeningPanelPseudoButton
+     * @param iconDirectory directory of PNG File
+     */
     public void addIcon2Pseudobutton (OpeningPanelPseudoButton pseudobutton, String iconDirectory) {
         try {
             BufferedImage IconPNG = ImageIO.read(getClass().getResource(iconDirectory));

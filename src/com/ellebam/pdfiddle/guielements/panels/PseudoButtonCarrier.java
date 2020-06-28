@@ -3,12 +3,23 @@ package com.ellebam.pdfiddle.guielements.panels;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This Class represents the JPanels which hold the OpeningPanelPseudobuttons for the various functionalities inside
+ * the OpeningPanel
+ */
 public class PseudoButtonCarrier extends JPanel {
     private PseudoButtonCarrier pseudoButtonCarrier;
     protected Color color = new Color(4,118,208);
     protected Dimension arcs = new Dimension(20,20);
     protected Dimension dimension = new Dimension (250,150);
 
+    /**
+     * Constructor for the creation of PseudoButtonCarrier. It will take a MiddleLabelPanel and the corresponding
+     * OpeningPanelPseudobutton
+     *
+     * @param middleLabelPanel TextLabel for the PseudoButtonCarrier
+     * @param openingPanelPseudoButton corresponding OpeningPanelPseudoButton
+     */
     public PseudoButtonCarrier(MiddleLabelPanel middleLabelPanel,
                                OpeningPanelPseudoButton openingPanelPseudoButton){
         pseudoButtonCarrier  = this;
@@ -26,6 +37,12 @@ public class PseudoButtonCarrier extends JPanel {
         pseudoButtonCarrier.setPreferredSize(dimension);
     }
 
+    /**
+     * same Constructor as above but for a carrier which displays 2 OpeningPanelPseudoButtons
+     * @param middleLabelPanel TextLabel for the PseudoButtonCarrier
+     * @param openingPanelPseudoButton1 first corresponding OpeningPanelPseudoButton
+     * @param openingPanelPseudoButton2 second corresponding OpeningPanelPseudoButton
+     */
     public PseudoButtonCarrier(MiddleLabelPanel middleLabelPanel,
                                OpeningPanelPseudoButton openingPanelPseudoButton1,
                                OpeningPanelPseudoButton openingPanelPseudoButton2){
@@ -47,6 +64,10 @@ public class PseudoButtonCarrier extends JPanel {
 
     }
 
+    /**
+     * overridden paintComponent() method for rounded corners
+     * @param g Graphic object to paint
+     */
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);

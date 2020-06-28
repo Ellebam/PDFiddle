@@ -5,6 +5,10 @@ package com.ellebam.pdfiddle.guielements.panels;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This Class represents the Pseudobuttons on the OpeningPanel. Clicking these inside the OpeningPanel will lead to the
+ * described functionality
+ */
 public class OpeningPanelPseudoButton extends JPanel {
     OpeningPanelPseudoButton openingPanelPseudoButton;
 
