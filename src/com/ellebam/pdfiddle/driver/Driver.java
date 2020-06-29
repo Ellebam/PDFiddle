@@ -45,7 +45,7 @@ public class Driver {
 
     }
 
-    public void decryptPDF(File Doc2Decrypt, Boolean overwriteSourceFile){
+    public void decryptPDF(File Doc2Decrypt, Boolean overwriteSourceFile, MainFrame mainFrame){
         try{
             Driver temporalDriver = new Driver();
             try{
@@ -60,7 +60,7 @@ public class Driver {
                 if(overwriteSourceFile){
                     PDF2Decrypt.save(Doc2Decrypt.getAbsolutePath());
                 }else{
-                    PDF2Decrypt.save(temporalDriver.chooseSaveDirectory()+"\\DecryptedPDF.pdf");
+                    PDF2Decrypt.save(temporalDriver.chooseSaveDirectory(mainFrame)+"\\DecryptedPDF.pdf");
                 }
             }
         }catch(Exception ex){
@@ -69,7 +69,8 @@ public class Driver {
         }
     }
 
-    public void encryptPDF(File Doc2Encrypt, Boolean overwriteSourceFile, String authorPassword, String userPassword){
+    public void encryptPDF(File Doc2Encrypt, Boolean overwriteSourceFile, String authorPassword, String userPassword,
+                           MainFrame mainFrame){
         try {
             Driver tempoDriver = new Driver();
             PDDocument PDF2Encrypt = PDDocument.load(Doc2Encrypt);
@@ -81,7 +82,7 @@ public class Driver {
             if(overwriteSourceFile){
                 PDF2Encrypt.save(Doc2Encrypt.getAbsolutePath());
             }else{
-                PDF2Encrypt.save(tempoDriver.chooseSaveDirectory()+"\\EncryptedPDF.pdf");
+                PDF2Encrypt.save(tempoDriver.chooseSaveDirectory(mainFrame)+"\\EncryptedPDF.pdf");
             }
             PDF2Encrypt.close();
         } catch (Exception ex) {
@@ -492,10 +493,10 @@ public File chooseDoc(){
         return fileChoose.getSelectedFile();
 }
 
-public String chooseSaveDirectory (/*Frame frame*/){
+public String chooseSaveDirectory (MainFrame mainFrame){
     JFileChooser fileSave = new JFileChooser("C:\\Arinhobag");
     fileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    fileSave.showOpenDialog(/*frame*/ null);
+    fileSave.showOpenDialog(mainFrame);
     return fileSave.getSelectedFile().getAbsolutePath();
 }
 }
