@@ -8,12 +8,13 @@ public class SelectDocPseudoButton extends JPanel {
     SelectDocPseudoButton selectDocPseudoButton;
 
     protected Color buttonColor = new Color(107,214,250);
+    protected Dimension arcs = new Dimension(20,20);
     protected Color buttonBorderColor = new Color(192, 237, 252);
     protected Dimension buttonDimension = new Dimension(240,120);
     protected Font buttonTextFont = new Font("Arial",Font.BOLD,20);
     protected Border buttonBorder = BorderFactory.createLineBorder(buttonBorderColor,10,true);
     protected JLabel buttonLabel = new JLabel("Select File");
-    protected Dimension arcs = new Dimension(20,20);
+
 
     public SelectDocPseudoButton (){
         selectDocPseudoButton=this;

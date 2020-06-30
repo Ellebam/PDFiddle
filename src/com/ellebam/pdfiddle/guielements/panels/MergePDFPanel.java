@@ -39,18 +39,20 @@ public class MergePDFPanel extends JPanel {
 
 
         fileHandlerPanel.setLayout(new BoxLayout(fileHandlerPanel,BoxLayout.Y_AXIS));
-        fileHandlerPanel.setPreferredSize(new Dimension(350,200));
-        fileHandlerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,3,true));
+        //fileHandlerPanel.setPreferredSize(new Dimension(350,200));
+
 
 
         JScrollPane fileCarrierScroller = new JScrollPane(fileHandlerPanel);
         fileCarrierScroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        fileCarrierPanel.add(fileCarrierScroller);
+        fileCarrierScroller.setPreferredSize(new Dimension(350,200));
+        fileCarrierScroller.setOpaque(false);
+        fileCarrierScroller.setBorder(BorderFactory.createEmptyBorder());
 
 
         mergePDFPanel.add(headerPanel);
         mergePDFPanel.add(selectCarrierPanel);
-        mergePDFPanel.add(fileCarrierPanel);
+        mergePDFPanel.add(fileCarrierScroller);
 
         fileCarrierPanel.setVisible(false);
 
@@ -72,10 +74,14 @@ public class MergePDFPanel extends JPanel {
                 if(mergeFileList.size() >0) {
                     fileCarrierPanel.setVisible(true);
                 }else{fileCarrierPanel.setVisible(false);}
-
+                fileHandlerPanel.removeAll();
                 for(int i =0; i< mergeFileList.size();i++){
-                    fileHandlerPanel.add(new PDF2MergeDisplay(mergeFileList,i));
+                    JPanel carrier = new JPanel();
+                    carrier.add(new PDF2MergeDisplay(mergeFileList,i));
+                    carrier.setOpaque(false);
+                    fileHandlerPanel.add(carrier);
                 }
+                mergePDFPanel.revalidate();
             }
         }));
     }
@@ -87,24 +93,39 @@ public class MergePDFPanel extends JPanel {
 
 
         PDF2MergeDisplay pdf2MergeDisplay;
+        protected Color fileDisplayColor = new Color(107, 214, 250);
+        protected Dimension arcs = new Dimension(30, 30);
 
-        public PDF2MergeDisplay(ArrayList<File> mergeFileList, int mergeFileListIndex){
-            pdf2MergeDisplay=this;
-            JLabel docNameLabel = new JLabel(mergeFileList.get(mergeFileListIndex).getAbsolutePath());
+        public PDF2MergeDisplay(ArrayList<File> mergeFileList, int mergeFileListIndex) {
+            pdf2MergeDisplay = this;
+            JLabel docNameLabel = new JLabel(mergeFileList.get(mergeFileListIndex).getAbsoluteFile().getName());
             JPanel nameLabelPanel = new JPanel();
+            docNameLabel.setAlignmentX(LEFT_ALIGNMENT);
+            nameLabelPanel.setPreferredSize(new Dimension(200, 25));
             nameLabelPanel.add(docNameLabel);
+            docNameLabel.setAlignmentY(BOTTOM_ALIGNMENT);
+            nameLabelPanel.setOpaque(false);
+
 
             JPanel cancelButtonPanel = new JPanel();
-            addIcons(cancelButtonPanel,"/com/ellebam/pdfiddle/Icons/Vetors Market/down-arrow.png");
+            addIcons(cancelButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/cancel_icon.png");
+
+            JPanel upButtonPanel = new JPanel();
+            addIcons(upButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/up-arrow_icon.png");
+
+            JPanel downButtonPanel = new JPanel();
+            addIcons(downButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/down-arrow_icon.png");
 
             pdf2MergeDisplay.add(nameLabelPanel);
             pdf2MergeDisplay.add(Box.createHorizontalGlue());
+            pdf2MergeDisplay.add(upButtonPanel);
+            upButtonPanel.setOpaque(false);
+            pdf2MergeDisplay.add(downButtonPanel);
+            downButtonPanel.setOpaque(false);
             pdf2MergeDisplay.add(cancelButtonPanel);
-
-
-
-
-
+            cancelButtonPanel.setOpaque(false);
+            pdf2MergeDisplay.setPreferredSize(new Dimension(350, 40));
+            pdf2MergeDisplay.setOpaque(false);
 
         }
 
@@ -116,32 +137,43 @@ public class MergePDFPanel extends JPanel {
             this.pdf2MergeDisplay = pdf2MergeDisplay;
         }
 
-        public void addIcons (JPanel iconCarrier, String iconDirectory) {
+        public void addIcons(JPanel iconCarrier, String iconDirectory) {
             try {
                 BufferedImage IconPNG = ImageIO.read(getClass().getResource(iconDirectory));
                 ImageIcon icon = new ImageIcon(IconPNG);
-                JLabel iconLabel = new JLabel(scaleImage(icon, 15, 15));
+                JLabel iconLabel = new JLabel(scaleImage(icon, 30, 25));
                 iconCarrier.add(iconLabel);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
-        public ImageIcon scaleImage (ImageIcon icon, int width, int height){
+        public ImageIcon scaleImage(ImageIcon icon, int width, int height) {
             int newWidth = icon.getIconWidth();
             int newHeight = icon.getIconHeight();
 
-            if(icon.getIconWidth()>width){
+            if (icon.getIconWidth() > width) {
                 newWidth = width;
-                newHeight = (newWidth*icon.getIconHeight())/icon.getIconWidth();
+                newHeight = (newWidth * icon.getIconHeight()) / icon.getIconWidth();
             }
 
-            if(newHeight>height){
-                newHeight=height;
-                newWidth=(icon.getIconWidth()*newHeight/icon.getIconHeight());
+            if (newHeight > height) {
+                newHeight = height;
+                newWidth = (icon.getIconWidth() * newHeight / icon.getIconHeight());
             }
 
-            return new ImageIcon(icon.getImage().getScaledInstance(newWidth,newHeight,Image.SCALE_DEFAULT));
+            return new ImageIcon(icon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT));
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            int width = getWidth();
+            int height = getHeight();
+            Graphics2D graphics = (Graphics2D) g;
+            graphics.setColor(fileDisplayColor);
+            graphics.fillRoundRect(0, 0, width, height, arcs.width, arcs.height);
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
     }
 
