@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class MergePDFPanel extends JPanel {
     private MergePDFPanel mergePDFPanel;
@@ -70,21 +72,29 @@ public class MergePDFPanel extends JPanel {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(mainFrame, "Error while loading File!");
                 }System.out.println(mergeFileList);
-
-                if(mergeFileList.size() >0) {
-                    fileCarrierPanel.setVisible(true);
-                }else{fileCarrierPanel.setVisible(false);}
-                fileHandlerPanel.removeAll();
-                for(int i =0; i< mergeFileList.size();i++){
-                    JPanel carrier = new JPanel();
-                    carrier.add(new PDF2MergeDisplay(mergeFileList,i));
-                    carrier.setOpaque(false);
-                    fileHandlerPanel.add(carrier);
-                }
-                mergePDFPanel.revalidate();
+                displayMergeFiles(mainFrame);
             }
         }));
     }
+
+    public void displayMergeFiles(MainFrame mainFrame) {
+        if(mergeFileList.size() >0) {
+            fileCarrierPanel.setVisible(true);
+        }else{/*fileCarrierPanel.setVisible(false);*/
+            fileHandlerPanel.removeAll();
+            mergePDFPanel.repaint();}
+        fileHandlerPanel.removeAll();
+        for(int i =0; i< mergeFileList.size();i++){
+            JPanel carrier = new JPanel();
+            carrier.add(new PDF2MergeDisplay(mergeFileList,i, mainFrame));
+            //carrier.setOpaque(false);
+            carrier.setAlignmentY(TOP_ALIGNMENT);
+            fileHandlerPanel.add(carrier);
+        }
+        mergePDFPanel.revalidate();
+    }
+
+
 
     /**
      * Inner Class for single JPanels which are loaded and shown, when a file has been loaded for merging
@@ -96,7 +106,9 @@ public class MergePDFPanel extends JPanel {
         protected Color fileDisplayColor = new Color(107, 214, 250);
         protected Dimension arcs = new Dimension(30, 30);
 
-        public PDF2MergeDisplay(ArrayList<File> mergeFileList, int mergeFileListIndex) {
+
+        public PDF2MergeDisplay(ArrayList<File> mergeFileList, int mergeFileListIndex, MainFrame mainframe) {
+
             pdf2MergeDisplay = this;
             JLabel docNameLabel = new JLabel(mergeFileList.get(mergeFileListIndex).getAbsoluteFile().getName());
             JPanel nameLabelPanel = new JPanel();
@@ -118,12 +130,41 @@ public class MergePDFPanel extends JPanel {
 
             pdf2MergeDisplay.add(nameLabelPanel);
             pdf2MergeDisplay.add(Box.createHorizontalGlue());
+
             pdf2MergeDisplay.add(upButtonPanel);
             upButtonPanel.setOpaque(false);
+            upButtonPanel.addMouseListener((new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    Collections.swap(mergeFileList,mergeFileListIndex,mergeFileListIndex-1);
+                    displayMergeFiles(mainframe);
+                }
+            }));
+
             pdf2MergeDisplay.add(downButtonPanel);
             downButtonPanel.setOpaque(false);
+            downButtonPanel.addMouseListener((new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    Collections.swap(mergeFileList,mergeFileListIndex,mergeFileListIndex+1);
+                    displayMergeFiles(mainframe);
+                }
+            }));
+
             pdf2MergeDisplay.add(cancelButtonPanel);
             cancelButtonPanel.setOpaque(false);
+            cancelButtonPanel.addMouseListener((new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    mergeFileList.remove(mergeFileListIndex);
+                    displayMergeFiles(mainframe);
+                }
+            }));
+
+
             pdf2MergeDisplay.setPreferredSize(new Dimension(350, 40));
             pdf2MergeDisplay.setOpaque(false);
 
@@ -175,6 +216,8 @@ public class MergePDFPanel extends JPanel {
             graphics.fillRoundRect(0, 0, width, height, arcs.width, arcs.height);
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
+
+
     }
 
 
