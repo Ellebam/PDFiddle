@@ -1,5 +1,7 @@
 package com.ellebam.pdfiddle.guielements.panels;
 
+import com.ellebam.pdfiddle.guielements.buttons.OpeningPanelPseudoButton;
+
 import javax.swing.*;
 import java.awt.*;
 

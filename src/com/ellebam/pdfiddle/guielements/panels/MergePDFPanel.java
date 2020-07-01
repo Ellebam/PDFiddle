@@ -2,21 +2,22 @@ package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.driver.Driver;
 import com.ellebam.pdfiddle.guielements.MainFrame;
+import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
+import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
+import com.sun.scenario.effect.Merge;
 
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 public class MergePDFPanel extends JPanel {
     private MergePDFPanel mergePDFPanel;
@@ -25,6 +26,7 @@ public class MergePDFPanel extends JPanel {
     private JPanel fileHandlerPanel = new JPanel();
     private JPanel fileCarrierPanel = new JPanel();
     private Driver mergeDriver = new Driver();
+
 
 
     public MergePDFPanel(MainFrame mainFrame){
@@ -55,6 +57,7 @@ public class MergePDFPanel extends JPanel {
         mergePDFPanel.add(headerPanel);
         mergePDFPanel.add(selectCarrierPanel);
         mergePDFPanel.add(fileCarrierScroller);
+        mergePDFPanel.add(new ControlButtonCarrier(("Merge")));
 
         fileCarrierPanel.setVisible(false);
 
@@ -68,10 +71,13 @@ public class MergePDFPanel extends JPanel {
                 super.mouseClicked(e);
                 try {
                     mergeFileList.add(mergeDriver.chooseDoc());
-                } catch (Exception ex) {
+                    mergeFileList.removeIf(Objects::isNull);
+
+                }catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(mainFrame, "Error while loading File!");
-                }System.out.println(mergeFileList);
+                }
+                System.out.println(mergeFileList);
                 displayMergeFiles(mainFrame);
             }
         }));
@@ -103,7 +109,7 @@ public class MergePDFPanel extends JPanel {
 
 
         PDF2MergeDisplay pdf2MergeDisplay;
-        protected Color fileDisplayColor = new Color(107, 214, 250);
+        protected Color fileDisplayColor = new SecondaryColor1();
         protected Dimension arcs = new Dimension(30, 30);
 
 

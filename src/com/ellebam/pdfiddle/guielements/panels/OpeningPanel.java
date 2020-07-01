@@ -2,6 +2,7 @@ package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.driver.Driver;
 import com.ellebam.pdfiddle.guielements.MainFrame;
+import com.ellebam.pdfiddle.guielements.buttons.OpeningPanelPseudoButton;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import com.ellebam.pdfiddle.guielements.labels.MiddleLabel;
 import com.ellebam.pdfiddle.guielements.labels.SmallLabel;
@@ -12,7 +13,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 /**
  * First Panel to appear when the program (and thus the mainFrame) is started. It shows OpeningPanelPseudobuttons (JPanels)

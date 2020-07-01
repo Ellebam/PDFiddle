@@ -1,4 +1,7 @@
-package com.ellebam.pdfiddle.guielements.panels;
+package com.ellebam.pdfiddle.guielements.buttons;
+
+import com.ellebam.pdfiddle.guielements.colors.PrimaryColor;
+import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -7,9 +10,9 @@ import java.awt.*;
 public class SelectDocPseudoButton extends JPanel {
     SelectDocPseudoButton selectDocPseudoButton;
 
-    protected Color buttonColor = new Color(107,214,250);
+    protected Color buttonColor = new PrimaryColor();
     protected Dimension arcs = new Dimension(20,20);
-    protected Color buttonBorderColor = new Color(192, 237, 252);
+    protected Color buttonBorderColor = new SecondaryColor1();
     protected Dimension buttonDimension = new Dimension(240,120);
     protected Font buttonTextFont = new Font("Arial",Font.BOLD,20);
     protected Border buttonBorder = BorderFactory.createLineBorder(buttonBorderColor,10,true);

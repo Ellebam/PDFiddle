@@ -1,6 +1,8 @@
-package com.ellebam.pdfiddle.guielements.panels;
+package com.ellebam.pdfiddle.guielements.buttons;
 
 
+
+import com.ellebam.pdfiddle.guielements.panels.SmallLabelPanel;
 
 import javax.swing.*;
 import java.awt.*;
