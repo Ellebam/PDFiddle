@@ -6,6 +6,8 @@ import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import com.sun.scenario.effect.Merge;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.JOniException;
+import jdk.nashorn.internal.scripts.JO;
 
 
 import javax.imageio.ImageIO;
@@ -43,7 +45,7 @@ public class MergePDFPanel extends JPanel {
 
 
         fileHandlerPanel.setLayout(new BoxLayout(fileHandlerPanel,BoxLayout.Y_AXIS));
-        //fileHandlerPanel.setPreferredSize(new Dimension(350,200));
+
 
 
 
@@ -54,10 +56,42 @@ public class MergePDFPanel extends JPanel {
         fileCarrierScroller.setBorder(BorderFactory.createEmptyBorder());
 
 
+        ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Merge");
+        controlButtonCarrier.backButton.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                super.mouseClicked(e);
+                mergePDFPanel.setVisible(false);
+                mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
+
+            }
+        });
+
+        controlButtonCarrier.operatorButton.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                super.mouseClicked(e);
+                if(mergeFileList.size() <=1){
+                    JOptionPane.showMessageDialog(mainFrame,"Add more documents to merge!");
+                }else{
+
+                    mergeDriver.mergePDFDocs(mergeDriver.chooseSaveDirectory(mainFrame), mergeFileList, mainFrame);
+                    JOptionPane.showMessageDialog(mainFrame,"Files successfully merged!");
+                    mergeFileList.removeAll(mergeFileList);
+                    mergePDFPanel.repaint();
+
+
+                }
+
+            }
+        });
+
         mergePDFPanel.add(headerPanel);
         mergePDFPanel.add(selectCarrierPanel);
         mergePDFPanel.add(fileCarrierScroller);
-        mergePDFPanel.add(new ControlButtonCarrier(("Merge")));
+        mergePDFPanel.add(controlButtonCarrier);
 
         fileCarrierPanel.setVisible(false);
 
@@ -70,7 +104,7 @@ public class MergePDFPanel extends JPanel {
             public void mouseClicked (MouseEvent e) {
                 super.mouseClicked(e);
                 try {
-                    mergeFileList.add(mergeDriver.chooseDoc());
+                    mergeDriver.addDocs2MergeList(mergeFileList,mergeDriver.chooseDoc());
                     mergeFileList.removeIf(Objects::isNull);
 
                 }catch (Exception ex) {
@@ -117,9 +151,10 @@ public class MergePDFPanel extends JPanel {
 
             pdf2MergeDisplay = this;
             JLabel docNameLabel = new JLabel(mergeFileList.get(mergeFileListIndex).getAbsoluteFile().getName());
-            JPanel nameLabelPanel = new JPanel();
             docNameLabel.setAlignmentX(LEFT_ALIGNMENT);
-            nameLabelPanel.setPreferredSize(new Dimension(200, 25));
+            JPanel nameLabelPanel = new JPanel();
+            nameLabelPanel.setAlignmentX(LEFT_ALIGNMENT);
+            nameLabelPanel.setPreferredSize(new Dimension(400, 25));
             nameLabelPanel.add(docNameLabel);
             docNameLabel.setAlignmentY(BOTTOM_ALIGNMENT);
             nameLabelPanel.setOpaque(false);
@@ -133,6 +168,7 @@ public class MergePDFPanel extends JPanel {
 
             JPanel downButtonPanel = new JPanel();
             addIcons(downButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/down-arrow_icon.png");
+
 
             pdf2MergeDisplay.add(nameLabelPanel);
             pdf2MergeDisplay.add(Box.createHorizontalGlue());
@@ -171,7 +207,7 @@ public class MergePDFPanel extends JPanel {
             }));
 
 
-            pdf2MergeDisplay.setPreferredSize(new Dimension(350, 40));
+            pdf2MergeDisplay.setPreferredSize(new Dimension(550, 40));
             pdf2MergeDisplay.setOpaque(false);
 
         }

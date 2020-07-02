@@ -28,6 +28,8 @@ import java.util.List;
 
 public class Driver {
 
+
+
     public static void main(String[] args) {
         Driver driver = new Driver();
         driver.buildGui();
@@ -100,7 +102,8 @@ public class Driver {
      * @param destinationDirectory saving directory
      * @param mergeFiles ArrayList containing Files to merge for mergeDocs()-Method
      */
-    public void convertJPEG2PDF(ArrayList<File> listOfJPEGs, String destinationDirectory, Boolean mergeFiles){
+    public void convertJPEG2PDF(ArrayList<File> listOfJPEGs, String destinationDirectory,
+                                Boolean mergeFiles, MainFrame mainFrame){
        /* boolean mergeFiles =true;
         ArrayList<File> listOfJPEGs = new ArrayList<>();
         listOfJPEGs.add(driver.chooseDoc());
@@ -135,7 +138,7 @@ public class Driver {
                 for (int u =0; u<mergeList.size();u++){
                     System.out.println(mergeList.get(u).getName());
                 }
-                tempDriver.mergePDFDocs(destinationDirectory, mergeList);
+                tempDriver.mergePDFDocs(destinationDirectory, mergeList,mainFrame);
 
 
                 for(int i = 0; i<listOfJPEGs.size();i++){
@@ -358,7 +361,8 @@ public class Driver {
      * @param Doc2Split the Document which has to be split
      * @param splitPointList ArrayList which takes the Page-Points at which the Document has to be split
      */
-    public void splitPDFDocs (String destinationDirectory, File Doc2Split, ArrayList<Integer> splitPointList) {
+    public void splitPDFDocs (String destinationDirectory, File Doc2Split,
+                              ArrayList<Integer> splitPointList, MainFrame mainFrame) {
 
         /*ArrayList<Integer> splitPointList = new ArrayList<>();
         splitPointList.add(0);
@@ -398,7 +402,7 @@ public class Driver {
                             i++;
                         }
                         int x = u + 1;
-                        mergePDFDocs(destinationDirectory + "Nr" + x + ".pdf", mergeList);
+                        mergePDFDocs(destinationDirectory + "Nr" + x + ".pdf", mergeList, mainFrame);
                         System.out.println("Number " + x + " of new documents created");
                     }
                     for (int z = (splitPointList.get(splitPointList.size() - 1)) - 1; z > -1; z--) {
@@ -444,7 +448,7 @@ public class Driver {
                             i++;
                         }
                         int x = u + 1;
-                        mergePDFDocs(destinationDirectory + "Nr" + x + ".pdf", mergeList);
+                        mergePDFDocs(destinationDirectory + "Nr" + x + ".pdf", mergeList, mainFrame);
                         System.out.println("Number " + x + " of new documents created");
                     }
                     for (int z = (splitPointList.get(splitPointList.size() - 1)) - 1; z > -1; z--) {
@@ -470,7 +474,7 @@ public class Driver {
      * @param destinationDirectory saving directory
      * @param mergeList list of PDFs to merge
      */
-    public void mergePDFDocs (String destinationDirectory, ArrayList<File> mergeList){
+    public void mergePDFDocs (String destinationDirectory, ArrayList<File> mergeList, MainFrame mainFrame){
         PDFMergerUtility PDFmerger = new PDFMergerUtility();
         PDFmerger.setDestinationFileName(destinationDirectory+"\\mergedPDFs.pdf");
         try {
@@ -479,7 +483,8 @@ public class Driver {
                 PDFmerger.addSource(file);
             }
             PDFmerger.mergeDocuments(null);
-        }catch (Exception ex){ex.printStackTrace();}
+        }catch (Exception ex){ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame, "Error while merging files!");}
 }
 
 
