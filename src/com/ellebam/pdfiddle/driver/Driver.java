@@ -483,8 +483,10 @@ public class Driver {
                 PDFmerger.addSource(file);
             }
             PDFmerger.mergeDocuments(null);
+            JOptionPane.showMessageDialog(mainFrame,"Files successfully merged!");
         }catch (Exception ex){ex.printStackTrace();
-            JOptionPane.showMessageDialog(mainFrame, "Error while merging files!");}
+            JOptionPane.showMessageDialog(mainFrame, "Error while merging files!");
+        }
 }
 
 

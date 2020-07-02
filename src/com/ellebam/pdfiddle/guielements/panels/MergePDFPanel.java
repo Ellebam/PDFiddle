@@ -78,12 +78,12 @@ public class MergePDFPanel extends JPanel {
                 }else{
 
                     mergeDriver.mergePDFDocs(mergeDriver.chooseSaveDirectory(mainFrame), mergeFileList, mainFrame);
-                    JOptionPane.showMessageDialog(mainFrame,"Files successfully merged!");
                     mergeFileList.removeAll(mergeFileList);
                     mergePDFPanel.repaint();
 
 
                 }
+
 
             }
         });
