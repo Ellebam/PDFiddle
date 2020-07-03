@@ -6,6 +6,8 @@ import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SelectDocPseudoButton extends JPanel {
     SelectDocPseudoButton selectDocPseudoButton;
@@ -16,6 +18,7 @@ public class SelectDocPseudoButton extends JPanel {
     protected Dimension buttonDimension = new Dimension(240,120);
     protected Font buttonTextFont = new Font("Arial",Font.BOLD,20);
     protected Border buttonBorder = BorderFactory.createLineBorder(buttonBorderColor,10,true);
+    protected Border buttonBorder2 = BorderFactory.createLineBorder(Color.ORANGE,10,true);
     protected JLabel buttonLabel = new JLabel("Select File");
 
 
@@ -33,8 +36,25 @@ public class SelectDocPseudoButton extends JPanel {
         selectDocPseudoButton.add(buttonLabel);
         selectDocPseudoButton.add(Box.createVerticalGlue());
 
+        selectDocPseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseEntered (MouseEvent evt){
+                selectDocPseudoButton.setBorder(buttonBorder2);
+
+
+            }
+        }));
+        selectDocPseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseExited (MouseEvent evt){
+                selectDocPseudoButton.setBorder(buttonBorder);
+            }
+        }));
 
     }
+
+
+
 
     @Override
     protected void paintComponent(Graphics g){

@@ -1,6 +1,8 @@
 package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.guielements.buttons.OpeningPanelPseudoButton;
+import com.ellebam.pdfiddle.guielements.colors.PrimaryColor;
+import com.ellebam.pdfiddle.guielements.colors.SecondaryColor2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,7 @@ import java.awt.*;
  */
 public class PseudoButtonCarrier extends JPanel {
     private PseudoButtonCarrier pseudoButtonCarrier;
-    protected Color color = new Color(4,118,208);
+    protected Color color = new SecondaryColor2();
     protected Dimension arcs = new Dimension(20,20);
     protected Dimension dimension = new Dimension (250,150);
 
@@ -35,6 +37,7 @@ public class PseudoButtonCarrier extends JPanel {
         fakePanel.add(Box.createHorizontalGlue());
         fakePanel.setOpaque(false);
         pseudoButtonCarrier.add(fakePanel);
+        pseudoButtonCarrier.add(Box.createRigidArea(new Dimension(0,5)));
         pseudoButtonCarrier.setOpaque(false);
         pseudoButtonCarrier.setPreferredSize(dimension);
     }
@@ -55,12 +58,16 @@ public class PseudoButtonCarrier extends JPanel {
 
         JPanel fakePanel = new JPanel();
         fakePanel.setLayout(new BoxLayout(fakePanel,BoxLayout.X_AXIS));
+        fakePanel.add(Box.createRigidArea(new Dimension(5,0)));
         fakePanel.add(openingPanelPseudoButton1);
-        fakePanel.add(Box.createRigidArea(new Dimension(20,0)));
+        fakePanel.add(Box.createRigidArea(new Dimension(15,0)));
         fakePanel.add(openingPanelPseudoButton2);
+        fakePanel.add(Box.createRigidArea(new Dimension(5,0)));
         fakePanel.setOpaque(false);
 
+
         pseudoButtonCarrier.add(fakePanel);
+        pseudoButtonCarrier.add(Box.createRigidArea(new Dimension(0,5)));
         pseudoButtonCarrier.setOpaque(false);
         pseudoButtonCarrier.setPreferredSize(dimension);
 

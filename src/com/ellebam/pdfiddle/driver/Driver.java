@@ -43,7 +43,7 @@ public class Driver {
 
     public void buildGui(){
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
 
     }
 
@@ -484,8 +484,13 @@ public class Driver {
             }
             PDFmerger.mergeDocuments(null);
             JOptionPane.showMessageDialog(mainFrame,"Files successfully merged!");
+            mainFrame.getCurrentPanel().setVisible(false);
+            mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
         }catch (Exception ex){ex.printStackTrace();
             JOptionPane.showMessageDialog(mainFrame, "Error while merging files!");
+            mainFrame.getCurrentPanel().setVisible(false);
+            mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
+            mainFrame.getCurrentPanel().revalidate();
         }
 }
 

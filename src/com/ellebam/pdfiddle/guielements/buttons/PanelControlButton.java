@@ -3,7 +3,10 @@ package com.ellebam.pdfiddle.guielements.buttons;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor2;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PanelControlButton extends JPanel {
     PanelControlButton panelControlButton;
@@ -13,6 +16,7 @@ public class PanelControlButton extends JPanel {
     protected Dimension buttonDimension = new Dimension (80,40);
     protected Font buttonTextFont = new Font("Arial",Font.PLAIN, 18);
     protected JLabel buttonLabel;
+    protected Border buttonBorder = BorderFactory.createLineBorder(Color.ORANGE,3,true);
 
     public PanelControlButton(String textDisplay){
         panelControlButton=this;
@@ -28,6 +32,20 @@ public class PanelControlButton extends JPanel {
         panelControlButton.add(buttonLabel);
         panelControlButton.add(Box.createVerticalGlue());
 
+        panelControlButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseEntered (MouseEvent evt){
+                panelControlButton.setBorder(buttonBorder);
+
+
+            }
+        }));
+        panelControlButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseExited (MouseEvent evt){
+                panelControlButton.setBorder(null);
+            }
+        }));
 
     }
     @Override

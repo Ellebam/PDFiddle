@@ -2,10 +2,17 @@ package com.ellebam.pdfiddle.guielements.buttons;
 
 
 
+import com.ellebam.pdfiddle.guielements.colors.PrimaryColor;
+import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
+import com.ellebam.pdfiddle.guielements.colors.SecondaryColor2;
+import com.ellebam.pdfiddle.guielements.panels.MergePDFPanel;
 import com.ellebam.pdfiddle.guielements.panels.SmallLabelPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * This Class represents the Pseudobuttons on the OpeningPanel. Clicking these inside the OpeningPanel will lead to the
@@ -15,14 +22,15 @@ public class OpeningPanelPseudoButton extends JPanel {
     OpeningPanelPseudoButton openingPanelPseudoButton;
 
     protected int strokeSize = 1;
-    protected Color shadowColor = Color.black;
+    private Color shadowColor = Color.black;
     protected boolean shady = true;
     protected boolean highQuality = true;
     protected Dimension arcs = new Dimension(20, 20);
     protected int shadowGap = 5;
     protected int shadowOffset = 4;
     protected int shadowAlpha = 150;
-    protected Color color = new Color(246,195,36);
+    protected Color color = new PrimaryColor();
+
 
 
     public OpeningPanelPseudoButton(SmallLabelPanel smallLabelPanel) {
@@ -31,7 +39,21 @@ public class OpeningPanelPseudoButton extends JPanel {
         openingPanelPseudoButton = this;
         openingPanelPseudoButton.add(smallLabelPanel);
         openingPanelPseudoButton.setPreferredSize(new Dimension(65, 65));
-        openingPanelPseudoButton.setBackground(Color.LIGHT_GRAY);
+        openingPanelPseudoButton.setBackground(color);
+
+        openingPanelPseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseEntered (MouseEvent evt){
+                openingPanelPseudoButton.setBackground(Color.ORANGE);
+
+            }
+        }));
+        openingPanelPseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseExited (MouseEvent evt){
+                openingPanelPseudoButton.setBackground(color);
+            }
+        }));
 
     }
 

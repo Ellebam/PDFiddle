@@ -12,6 +12,7 @@ import jdk.nashorn.internal.scripts.JO;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
+
+/**
+ * Class representing the Panel for merging PDF Documents
+ */
 public class MergePDFPanel extends JPanel {
     private MergePDFPanel mergePDFPanel;
     private SelectDocPseudoButton selectDocPseudoButton = new SelectDocPseudoButton();
@@ -28,9 +33,12 @@ public class MergePDFPanel extends JPanel {
     private JPanel fileHandlerPanel = new JPanel();
     private JPanel fileCarrierPanel = new JPanel();
     private Driver mergeDriver = new Driver();
+    private Border border = BorderFactory.createLineBorder(Color.ORANGE,2,true);
 
-
-
+    /**
+     * Constructor for MergePDFPanel. It takes a MainFrame Object as a parameter for switching back and forth in Panels
+     * @param mainFrame Main controlling Frame
+     */
     public MergePDFPanel(MainFrame mainFrame){
         mergePDFPanel = this;
         mergePDFPanel.setLayout(new BoxLayout(mergePDFPanel, BoxLayout.Y_AXIS));
@@ -117,17 +125,21 @@ public class MergePDFPanel extends JPanel {
         }));
     }
 
+    /**
+     * Method responsible for showing the selected files for merging. For every selected file it will create a custom
+     * Panel with the name of the File
+     * @param mainFrame mainFrame is needed so other methods or constructors utilizing this method can access mainframe
+     */
     public void displayMergeFiles(MainFrame mainFrame) {
         if(mergeFileList.size() >0) {
             fileCarrierPanel.setVisible(true);
-        }else{/*fileCarrierPanel.setVisible(false);*/
+        }else{
             fileHandlerPanel.removeAll();
             mergePDFPanel.repaint();}
         fileHandlerPanel.removeAll();
         for(int i =0; i< mergeFileList.size();i++){
             JPanel carrier = new JPanel();
             carrier.add(new PDF2MergeDisplay(mergeFileList,i, mainFrame));
-            //carrier.setOpaque(false);
             carrier.setAlignmentY(TOP_ALIGNMENT);
             fileHandlerPanel.add(carrier);
         }
@@ -137,7 +149,7 @@ public class MergePDFPanel extends JPanel {
 
 
     /**
-     * Inner Class for single JPanels which are loaded and shown, when a file has been loaded for merging
+     * Inner Class for single JPanels which are loaded and shown, when a file has been loaded for merging (display)
      */
     public class PDF2MergeDisplay extends JPanel {
 
@@ -173,6 +185,11 @@ public class MergePDFPanel extends JPanel {
             pdf2MergeDisplay.add(nameLabelPanel);
             pdf2MergeDisplay.add(Box.createHorizontalGlue());
 
+
+            /**
+             *Button for moving Object associated with this panel up in the corresponding ArrayList. Other MouseListeners
+             * are used to highlight button when mouse is hovering over it
+             */
             pdf2MergeDisplay.add(upButtonPanel);
             upButtonPanel.setOpaque(false);
             upButtonPanel.addMouseListener((new MouseAdapter() {
@@ -183,7 +200,24 @@ public class MergePDFPanel extends JPanel {
                     displayMergeFiles(mainframe);
                 }
             }));
+            upButtonPanel.addMouseListener((new MouseAdapter(){
+                @Override
+                public void mouseEntered (MouseEvent evt){
+                    upButtonPanel.setBorder(border);
 
+                }
+            }));
+            upButtonPanel.addMouseListener((new MouseAdapter(){
+                @Override
+                public void mouseExited (MouseEvent evt){
+                    upButtonPanel.setBorder(null);
+                }
+            }));
+
+            /**
+             *Button for moving Object associated with this panel down in the corresponding ArrayList. Other MouseListeners
+             *  are used to highlight button when mouse is hovering over it
+             */
             pdf2MergeDisplay.add(downButtonPanel);
             downButtonPanel.setOpaque(false);
             downButtonPanel.addMouseListener((new MouseAdapter() {
@@ -194,7 +228,24 @@ public class MergePDFPanel extends JPanel {
                     displayMergeFiles(mainframe);
                 }
             }));
+            downButtonPanel.addMouseListener((new MouseAdapter(){
+                @Override
+                public void mouseEntered (MouseEvent evt){
+                    downButtonPanel.setBorder(border);
 
+                }
+            }));
+            downButtonPanel.addMouseListener((new MouseAdapter(){
+                @Override
+                public void mouseExited (MouseEvent evt){
+                    downButtonPanel.setBorder(null);
+                }
+            }));
+
+            /**
+             *Button for removing Object associated with this panel from the corresponding ArrayList. Other MouseListeners
+             * are used to highlight button when mouse is hovering over it
+             */
             pdf2MergeDisplay.add(cancelButtonPanel);
             cancelButtonPanel.setOpaque(false);
             cancelButtonPanel.addMouseListener((new MouseAdapter() {
@@ -205,21 +256,31 @@ public class MergePDFPanel extends JPanel {
                     displayMergeFiles(mainframe);
                 }
             }));
+            cancelButtonPanel.addMouseListener((new MouseAdapter(){
+                @Override
+                public void mouseEntered (MouseEvent evt){
+                    cancelButtonPanel.setBorder(border);
+
+                }
+            }));
+            cancelButtonPanel.addMouseListener((new MouseAdapter(){
+                @Override
+                public void mouseExited (MouseEvent evt){
+                    cancelButtonPanel.setBorder(null);
+                }
+            }));
 
 
-            pdf2MergeDisplay.setPreferredSize(new Dimension(550, 40));
+            pdf2MergeDisplay.setPreferredSize(new Dimension(550, 45));
             pdf2MergeDisplay.setOpaque(false);
 
         }
 
-        public PDF2MergeDisplay getPdf2MergeDisplay() {
-            return pdf2MergeDisplay;
-        }
-
-        public void setPdf2MergeDisplay(PDF2MergeDisplay pdf2MergeDisplay) {
-            this.pdf2MergeDisplay = pdf2MergeDisplay;
-        }
-
+        /**
+         * method for adding icon Images to a new Icon Object and adding that object to a existing Icon carrier JPanel
+         * @param iconCarrier the icon carrier JPanel
+         * @param iconDirectory saving directory of the .png file (in source folder)
+         */
         public void addIcons(JPanel iconCarrier, String iconDirectory) {
             try {
                 BufferedImage IconPNG = ImageIO.read(getClass().getResource(iconDirectory));
@@ -231,6 +292,13 @@ public class MergePDFPanel extends JPanel {
             }
         }
 
+        /**
+         * method for resizing icons while retaining icon scaling
+         * @param icon ImageIcon for resizing
+         * @param width desired width
+         * @param height desired height
+         * @return returns a fully rescaled Icon
+         */
         public ImageIcon scaleImage(ImageIcon icon, int width, int height) {
             int newWidth = icon.getIconWidth();
             int newHeight = icon.getIconHeight();

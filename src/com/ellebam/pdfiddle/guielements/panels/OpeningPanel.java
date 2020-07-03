@@ -65,6 +65,15 @@ public class OpeningPanel extends JPanel {
             }
         }));
 
+        splitPseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseClicked (MouseEvent e){
+                super.mouseClicked(e);
+                openingPanel.setVisible(false);
+                mainFrame.setAndAddCurrentPanel(new SplitPDFPanel(mainFrame));
+            }
+        }));
+
 
 
 
