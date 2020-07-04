@@ -3,6 +3,7 @@ package com.ellebam.pdfiddle.driver;
 import com.ellebam.pdfiddle.guielements.MainFrame;
 import com.ellebam.pdfiddle.guielements.panels.MergePDFPanel;
 import com.ellebam.pdfiddle.guielements.panels.OpeningPanel;
+import com.ellebam.pdfiddle.guielements.panels.SplitPDFPanel;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.multipdf.Splitter;
@@ -42,8 +43,11 @@ public class Driver {
     }
 
     public void buildGui(){
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }catch(Exception ex){ex.printStackTrace();}
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new SplitPDFPanel(mainFrame));
 
     }
 

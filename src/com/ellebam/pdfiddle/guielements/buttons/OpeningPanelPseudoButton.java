@@ -2,6 +2,7 @@ package com.ellebam.pdfiddle.guielements.buttons;
 
 
 
+import com.ellebam.pdfiddle.guielements.colors.HighlightColor;
 import com.ellebam.pdfiddle.guielements.colors.PrimaryColor;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor2;
@@ -30,6 +31,7 @@ public class OpeningPanelPseudoButton extends JPanel {
     protected int shadowOffset = 4;
     protected int shadowAlpha = 150;
     protected Color color = new PrimaryColor();
+    protected  Color highlightColor = new HighlightColor();
 
 
 
@@ -44,7 +46,7 @@ public class OpeningPanelPseudoButton extends JPanel {
         openingPanelPseudoButton.addMouseListener((new MouseAdapter(){
             @Override
             public void mouseEntered (MouseEvent evt){
-                openingPanelPseudoButton.setBackground(Color.ORANGE);
+                openingPanelPseudoButton.setBackground(highlightColor);
 
             }
         }));

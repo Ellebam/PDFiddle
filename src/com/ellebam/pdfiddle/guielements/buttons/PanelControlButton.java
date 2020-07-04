@@ -1,5 +1,6 @@
 package com.ellebam.pdfiddle.guielements.buttons;
 
+import com.ellebam.pdfiddle.guielements.colors.HighlightColor;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor2;
 
 import javax.swing.*;
@@ -12,11 +13,12 @@ public class PanelControlButton extends JPanel {
     PanelControlButton panelControlButton;
 
     protected Color buttonColor = new SecondaryColor2();
+    protected  Color highlightColor = new HighlightColor();
     protected  Dimension arcs = new Dimension(20,20);
     protected Dimension buttonDimension = new Dimension (80,40);
-    protected Font buttonTextFont = new Font("Arial",Font.PLAIN, 18);
+    protected Font buttonTextFont = new Font("Arial",Font.BOLD, 13);
     protected JLabel buttonLabel;
-    protected Border buttonBorder = BorderFactory.createLineBorder(Color.ORANGE,3,true);
+    protected Border buttonBorder = BorderFactory.createLineBorder(highlightColor,3,true);
 
     public PanelControlButton(String textDisplay){
         panelControlButton=this;
@@ -25,7 +27,7 @@ public class PanelControlButton extends JPanel {
         panelControlButton.setBackground(buttonColor);
         panelControlButton.setPreferredSize(buttonDimension);
         buttonLabel.setAlignmentX(CENTER_ALIGNMENT);
-        panelControlButton.setFont(buttonTextFont);
+        buttonLabel.setFont(buttonTextFont);
         panelControlButton.setForeground(Color.WHITE);
         panelControlButton.setOpaque(false);
         panelControlButton.add(Box.createVerticalGlue());
