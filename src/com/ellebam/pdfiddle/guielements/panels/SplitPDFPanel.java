@@ -10,7 +10,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class SplitPDFPanel extends JPanel {
     private SplitPDFPanel splitPDFPanel;
@@ -19,6 +21,8 @@ public class SplitPDFPanel extends JPanel {
     private ArrayList<Integer> splitPointList;
     private JPanel fileHandlerPanel = new JPanel();
     private Driver splitDriver = new Driver();
+    private ComboSelectionPanel comboSelectionPanel;
+    private String[] splitNumCombo = {"1","2","3","4","5"};
 
     public SplitPDFPanel (MainFrame mainFrame){
         splitPDFPanel = this;
@@ -31,8 +35,16 @@ public class SplitPDFPanel extends JPanel {
         selectCarrierPanel.add(selectDocPseudoButton);
 
         fileHandlerPanel.setLayout(new BoxLayout(fileHandlerPanel,BoxLayout.Y_AXIS));
+        comboSelectionPanel = new ComboSelectionPanel(splitNumCombo);
+       fileHandlerPanel.setAlignmentY(TOP_ALIGNMENT);
+        fileHandlerPanel.add(comboSelectionPanel);
+        fileHandlerPanel.setOpaque(false);
+        fileHandlerPanel.add(Box.createRigidArea(new Dimension(30,30)));
+
+
 
         ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Split");
+        controlButtonCarrier.setAlignmentY(BOTTOM_ALIGNMENT);
         controlButtonCarrier.backButton.addMouseListener(new MouseAdapter()
         {
             @Override

@@ -33,6 +33,7 @@ public class PanelControlButton extends JPanel {
         panelControlButton.add(Box.createVerticalGlue());
         panelControlButton.add(buttonLabel);
         panelControlButton.add(Box.createVerticalGlue());
+        panelControlButton.setAlignmentY(BOTTOM_ALIGNMENT);
 
         panelControlButton.addMouseListener((new MouseAdapter(){
             @Override

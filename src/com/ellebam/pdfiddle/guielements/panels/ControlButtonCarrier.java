@@ -16,17 +16,22 @@ public class ControlButtonCarrier extends JPanel {
         operatorButton = new PanelControlButton(operatorButtonText);
         JPanel temppoCarrier = new JPanel();
 
-        temppoCarrier.setOpaque(false);
+        temppoCarrier.setOpaque(true);
 
         temppoCarrier.setLayout(new BoxLayout(temppoCarrier,BoxLayout.X_AXIS));
         temppoCarrier.add(Box.createHorizontalGlue());
         temppoCarrier.add(backButton);
         temppoCarrier.add(Box.createRigidArea(new Dimension(10,10)));
         temppoCarrier.add(operatorButton);
+        temppoCarrier.setAlignmentY(1f);
 
 
+
+        controlButtonCarrier.add(Box.createVerticalGlue());
         controlButtonCarrier.add(temppoCarrier);
-        controlButtonCarrier.setAlignmentX(-3f);
+        controlButtonCarrier.setAlignmentX(LEFT_ALIGNMENT);
+        controlButtonCarrier.setAlignmentY(-1f);
+        controlButtonCarrier.setMaximumSize(new Dimension (200,50));
 
     }
 }
