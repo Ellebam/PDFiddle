@@ -4,6 +4,7 @@ import com.ellebam.pdfiddle.driver.Driver;
 import com.ellebam.pdfiddle.guielements.MainFrame;
 import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,11 +19,14 @@ public class SplitPDFPanel extends JPanel {
     private SplitPDFPanel splitPDFPanel;
     private SelectDocPseudoButton selectDocPseudoButton = new SelectDocPseudoButton();
     private File doc2Split;
+    private PDDocument PDF2Split;
     private ArrayList<Integer> splitPointList;
     private JPanel fileHandlerPanel = new JPanel();
     private Driver splitDriver = new Driver();
     private ComboSelectionPanel comboSelectionPanel;
-    private String[] splitNumCombo = {"1","2","3","4","5"};
+    private String[] splitNumCombo = {"0","1","2","3","4","5"};
+    private FilePreviewPanel filePreviewPanel;
+
 
     public SplitPDFPanel (MainFrame mainFrame){
         splitPDFPanel = this;
@@ -35,11 +39,12 @@ public class SplitPDFPanel extends JPanel {
         selectCarrierPanel.add(selectDocPseudoButton);
 
         fileHandlerPanel.setLayout(new BoxLayout(fileHandlerPanel,BoxLayout.Y_AXIS));
-        comboSelectionPanel = new ComboSelectionPanel(splitNumCombo);
-       fileHandlerPanel.setAlignmentY(TOP_ALIGNMENT);
-        fileHandlerPanel.add(comboSelectionPanel);
+        comboSelectionPanel = new ComboSelectionPanel(splitNumCombo,"<html>Select number of splits<br/>(select 0 for splitting all pages)</html>");
+        fileHandlerPanel.setAlignmentY(TOP_ALIGNMENT);
         fileHandlerPanel.setOpaque(false);
-        fileHandlerPanel.add(Box.createRigidArea(new Dimension(30,30)));
+        fileHandlerPanel.add(comboSelectionPanel);
+        comboSelectionPanel.setVisible(false);
+        fileHandlerPanel.add(Box.createRigidArea(new Dimension(30,10)));
 
 
 
@@ -72,5 +77,27 @@ public class SplitPDFPanel extends JPanel {
         splitPDFPanel.add(fileHandlerPanel);
         splitPDFPanel.add(controlButtonCarrier);
 
-    }
+
+
+        selectDocPseudoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (fileHandlerPanel.getComponentCount() > 1){
+                    fileHandlerPanel.remove(1);
+                }
+                try{
+                    doc2Split = splitDriver.chooseDoc();
+                    filePreviewPanel = new FilePreviewPanel(doc2Split,mainFrame,0);
+                    fileHandlerPanel.add(filePreviewPanel);
+                    comboSelectionPanel.setVisible(true);
+
+
+                }catch(Exception ex){ex.printStackTrace();
+            }
+                fileHandlerPanel.revalidate();
+        }
+    });
+}
+
 }

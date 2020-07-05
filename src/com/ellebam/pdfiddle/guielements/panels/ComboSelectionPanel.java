@@ -15,10 +15,11 @@ public class ComboSelectionPanel extends JPanel {
     private ComboSelectionPanel comboSelectionPanel;
     private Color panelColor = new SecondaryColor1();
     private  Dimension arcs = new Dimension(30,30);
-    private SmallLabel panelLabel = new SmallLabel("Select number of splits");
+    private SmallLabel panelLabel;
 
-    public ComboSelectionPanel(String[] comboList){
+    public ComboSelectionPanel(String[] comboList, String labelText){
         comboSelectionPanel=this;
+        panelLabel = new SmallLabel(labelText);
         SmallLabelPanel smallLabelPanel = new SmallLabelPanel(panelLabel);
         JPanel carrierPanel = new JPanel();
         carrierPanel.setLayout(new BoxLayout(carrierPanel,BoxLayout.X_AXIS));

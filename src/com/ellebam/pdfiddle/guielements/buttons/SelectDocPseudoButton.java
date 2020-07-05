@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 public class SelectDocPseudoButton extends JPanel {
     SelectDocPseudoButton selectDocPseudoButton;
@@ -54,6 +55,8 @@ public class SelectDocPseudoButton extends JPanel {
         }));
 
     }
+
+
 
 
 
