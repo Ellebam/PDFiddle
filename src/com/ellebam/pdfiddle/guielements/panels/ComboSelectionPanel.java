@@ -3,6 +3,7 @@ package com.ellebam.pdfiddle.guielements.panels;
 import com.ellebam.pdfiddle.guielements.colors.HighlightColor;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
 import com.ellebam.pdfiddle.guielements.labels.SmallLabel;
+import javafx.scene.control.ComboBox;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -16,17 +17,21 @@ public class ComboSelectionPanel extends JPanel {
     private Color panelColor = new SecondaryColor1();
     private  Dimension arcs = new Dimension(30,30);
     private SmallLabel panelLabel;
+    private JPanel carrierPanel;
+    private JComboBox comboBox;
+
+
 
     public ComboSelectionPanel(String[] comboList, String labelText){
         comboSelectionPanel=this;
         panelLabel = new SmallLabel(labelText);
         SmallLabelPanel smallLabelPanel = new SmallLabelPanel(panelLabel);
-        JPanel carrierPanel = new JPanel();
+        carrierPanel = new JPanel();
         carrierPanel.setLayout(new BoxLayout(carrierPanel,BoxLayout.X_AXIS));
         carrierPanel.setOpaque(false);
         carrierPanel.setAlignmentY(CENTER_ALIGNMENT);
         smallLabelPanel.setAlignmentY(CENTER_ALIGNMENT);
-        JComboBox comboBox = new JComboBox(comboList);
+        comboBox = new JComboBox(comboList);
         comboBox.setSelectedIndex(0);
 
 
@@ -40,7 +45,9 @@ public class ComboSelectionPanel extends JPanel {
 
     }
 
-
+    public JComboBox getComboBox() {
+        return comboBox;
+    }
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);

@@ -26,6 +26,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Driver {
 
@@ -467,7 +468,7 @@ public class Driver {
 
                 }
             }
-        }catch (Exception ex) {ex.printStackTrace();}
+        }catch (Exception ex) {ex.printStackTrace();JOptionPane.showMessageDialog(mainFrame,"Error while splitting PDF!");}
         }
 
 
@@ -515,4 +516,17 @@ public String chooseSaveDirectory (MainFrame mainFrame){
     fileSave.showOpenDialog(mainFrame);
     return fileSave.getSelectedFile().getAbsolutePath();
 }
+
+public String[] createRangeArray(int start, int end){
+        IntStream stream = IntStream.range(start, end);
+        int[] intRange = stream.toArray();
+
+        String[] stringRange = new String[intRange.length];
+        for (int i=0;i<intRange.length;i++){
+            stringRange[i]=String.valueOf(intRange[i]);
+        }
+
+return stringRange;
+}
+
 }

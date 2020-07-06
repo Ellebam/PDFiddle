@@ -28,6 +28,7 @@ public class SplitPDFPanel extends JPanel {
     private FilePreviewPanel filePreviewPanel;
 
 
+
     public SplitPDFPanel (MainFrame mainFrame){
         splitPDFPanel = this;
         splitPDFPanel.setLayout((new BoxLayout(splitPDFPanel, BoxLayout.Y_AXIS)));
@@ -45,6 +46,8 @@ public class SplitPDFPanel extends JPanel {
         fileHandlerPanel.add(comboSelectionPanel);
         comboSelectionPanel.setVisible(false);
         fileHandlerPanel.add(Box.createRigidArea(new Dimension(30,10)));
+
+
 
 
 
@@ -66,8 +69,19 @@ public class SplitPDFPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e){
                 super.mouseClicked(e);
+                ArrayList<String[]> stringRangeList = new ArrayList<>();
+
+                if(comboSelectionPanel.getComboBox().getSelectedIndex()==0){
+                    splitDriver.splitPDFDocs(splitDriver.chooseSaveDirectory(mainFrame),
+                            splitDriver.chooseDoc(),splitPointList,mainFrame);
+                }else{
+                for(int i=0; i<comboSelectionPanel.getComboBox().getSelectedIndex();i++){
+                    //continue here!!
+                }
+
 
                 }
+            }
 
 
         });
