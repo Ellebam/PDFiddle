@@ -31,7 +31,6 @@ import java.util.stream.IntStream;
 public class Driver {
 
 
-
     public static void main(String[] args) {
         Driver driver = new Driver();
         driver.buildGui();
@@ -39,57 +38,57 @@ public class Driver {
 
 
 
-
-
     }
 
-    public void buildGui(){
+    public void buildGui() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }catch(Exception ex){ex.printStackTrace();}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         MainFrame mainFrame = new MainFrame();
         mainFrame.setAndAddCurrentPanel(new SplitPDFPanel(mainFrame));
 
     }
 
-    public void decryptPDF(File Doc2Decrypt, Boolean overwriteSourceFile, MainFrame mainFrame){
-        try{
+    public void decryptPDF(File Doc2Decrypt, Boolean overwriteSourceFile, MainFrame mainFrame) {
+        try {
             Driver temporalDriver = new Driver();
-            try{
+            try {
                 PDDocument PDF2Decrypt = PDDocument.load(Doc2Decrypt);
                 JOptionPane.showMessageDialog(null, "Document not encrypted!");
-            }catch(InvalidPasswordException invalidPasswordException){
+            } catch (InvalidPasswordException invalidPasswordException) {
                 PDDocument PDF2Decrypt = PDDocument.load(Doc2Decrypt,
                         JOptionPane.showInputDialog(null,
-                                Doc2Decrypt.getName()+" is password protected. " +
+                                Doc2Decrypt.getName() + " is password protected. " +
                                         "Please enter the password to open the document"));
                 PDF2Decrypt.setAllSecurityToBeRemoved(true);
-                if(overwriteSourceFile){
+                if (overwriteSourceFile) {
                     PDF2Decrypt.save(Doc2Decrypt.getAbsolutePath());
-                }else{
-                    PDF2Decrypt.save(temporalDriver.chooseSaveDirectory(mainFrame)+"\\DecryptedPDF.pdf");
+                } else {
+                    PDF2Decrypt.save(temporalDriver.chooseSaveDirectory(mainFrame) + "\\DecryptedPDF.pdf");
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null,"Error while decrypting!");
+            JOptionPane.showMessageDialog(null, "Error while decrypting!");
         }
     }
 
     public void encryptPDF(File Doc2Encrypt, Boolean overwriteSourceFile, String authorPassword, String userPassword,
-                           MainFrame mainFrame){
+                           MainFrame mainFrame) {
         try {
             Driver tempoDriver = new Driver();
             PDDocument PDF2Encrypt = PDDocument.load(Doc2Encrypt);
             AccessPermission accessPermission = new AccessPermission();
-            StandardProtectionPolicy spp = new StandardProtectionPolicy(authorPassword,userPassword,accessPermission);
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(authorPassword, userPassword, accessPermission);
             spp.setEncryptionKeyLength(128);
             spp.setPermissions(accessPermission);
             PDF2Encrypt.protect(spp);
-            if(overwriteSourceFile){
+            if (overwriteSourceFile) {
                 PDF2Encrypt.save(Doc2Encrypt.getAbsolutePath());
-            }else{
-                PDF2Encrypt.save(tempoDriver.chooseSaveDirectory(mainFrame)+"\\EncryptedPDF.pdf");
+            } else {
+                PDF2Encrypt.save(tempoDriver.chooseSaveDirectory(mainFrame) + "\\EncryptedPDF.pdf");
             }
             PDF2Encrypt.close();
         } catch (Exception ex) {
@@ -98,17 +97,16 @@ public class Driver {
     }
 
 
-
-
     /**
-     *This method will turn JPEGs into PDF-Documents. It utilizes a boolean (mergeFiles) to determine wether the JPEGs
+     * This method will turn JPEGs into PDF-Documents. It utilizes a boolean (mergeFiles) to determine wether the JPEGs
      * should be converted into separate PDF-Files or merged into one singular PDF-File
-     * @param listOfJPEGs ArrayList of Files containing the JPEGs to convert
+     *
+     * @param listOfJPEGs          ArrayList of Files containing the JPEGs to convert
      * @param destinationDirectory saving directory
-     * @param mergeFiles ArrayList containing Files to merge for mergeDocs()-Method
+     * @param mergeFiles           ArrayList containing Files to merge for mergeDocs()-Method
      */
     public void convertJPEG2PDF(ArrayList<File> listOfJPEGs, String destinationDirectory,
-                                Boolean mergeFiles, MainFrame mainFrame){
+                                Boolean mergeFiles, MainFrame mainFrame) {
        /* boolean mergeFiles =true;
         ArrayList<File> listOfJPEGs = new ArrayList<>();
         listOfJPEGs.add(driver.chooseDoc());
@@ -119,11 +117,11 @@ public class Driver {
 
         driver.convertJPEG2PDF(listOfJPEGs,driver.chooseSaveDirectory(),mergeFiles);*/
 
-        try{
-            if(mergeFiles){
+        try {
+            if (mergeFiles) {
                 ArrayList<File> mergeList = new ArrayList<>();
 
-                for(int i = 0; i<listOfJPEGs.size();i++) {
+                for (int i = 0; i < listOfJPEGs.size(); i++) {
                     PDDocument JPEGConversionDoc = new PDDocument();
                     PDPage page = new PDPage();
                     JPEGConversionDoc.addPage(page);
@@ -135,45 +133,49 @@ public class Driver {
                     contentStream.close();
                     JPEGConversionDoc.save(destinationDirectory + "\\tempPDF" + i + ".pdf");
 
-                    File tempFile = new File (destinationDirectory + "\\tempPDF" + i + ".pdf");
+                    File tempFile = new File(destinationDirectory + "\\tempPDF" + i + ".pdf");
                     mergeList.add(tempFile);
                 }
 
                 Driver tempDriver = new Driver();
-                for (int u =0; u<mergeList.size();u++){
+                for (int u = 0; u < mergeList.size(); u++) {
                     System.out.println(mergeList.get(u).getName());
                 }
-                tempDriver.mergePDFDocs(destinationDirectory, mergeList,mainFrame);
+                tempDriver.mergePDFDocs(destinationDirectory, mergeList, mainFrame);
 
 
-                for(int i = 0; i<listOfJPEGs.size();i++){
-                    File tempFile = new File(destinationDirectory + "\\tempPDF"+ i + ".pdf");
+                for (int i = 0; i < listOfJPEGs.size(); i++) {
+                    File tempFile = new File(destinationDirectory + "\\tempPDF" + i + ".pdf");
                     if (tempFile.delete()) {
-                        System.out.println(destinationDirectory + "\\tempPDF"+ i + ".pdf deleted");
-                    } else {System.out.println(destinationDirectory+ "\\tempPDF" + i + ".pdf not deleted"); }
+                        System.out.println(destinationDirectory + "\\tempPDF" + i + ".pdf deleted");
+                    } else {
+                        System.out.println(destinationDirectory + "\\tempPDF" + i + ".pdf not deleted");
+                    }
                 }
 
-            }else{
-                for(int i = 0; i<listOfJPEGs.size();i++){
+            } else {
+                for (int i = 0; i < listOfJPEGs.size(); i++) {
                     PDDocument JPEGConversionDoc = new PDDocument();
 
                     PDPage page = new PDPage();
                     JPEGConversionDoc.addPage(page);
                     PDImageXObject pdImage = PDImageXObject.createFromFile(listOfJPEGs.get(i).getAbsolutePath(),
                             JPEGConversionDoc);
-                    page.setMediaBox(new PDRectangle(0,0,pdImage.getWidth(),pdImage.getHeight()));
+                    page.setMediaBox(new PDRectangle(0, 0, pdImage.getWidth(), pdImage.getHeight()));
 
-                    PDPageContentStream contentStream = new PDPageContentStream(JPEGConversionDoc,JPEGConversionDoc.getPage(0));
-                    contentStream.drawImage(pdImage,0,0,page.getMediaBox().getWidth(),page.getMediaBox().getHeight());
+                    PDPageContentStream contentStream = new PDPageContentStream(JPEGConversionDoc, JPEGConversionDoc.getPage(0));
+                    contentStream.drawImage(pdImage, 0, 0, page.getMediaBox().getWidth(), page.getMediaBox().getHeight());
                     contentStream.close();
-                    JPEGConversionDoc.save(destinationDirectory+"\\newPDF"+i+".pdf");
+                    JPEGConversionDoc.save(destinationDirectory + "\\newPDF" + i + ".pdf");
                     System.out.println("new PDF saved");
                     JPEGConversionDoc.close();
 
                 }
 
             }
-        }catch(Exception ex){ ex.printStackTrace();}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
@@ -181,13 +183,14 @@ public class Driver {
      * Works similar to removePagesFromPDF() since it utilizes a ArrayList containing booleans to determine
      * which pages have to be processed. With that information, the method will pick Pages from a given
      * PDF File and convert them into JPEGs while also saving them (with given DPI).
-     * @param Doc2Convert2JPEG PDF to convert pages from
+     *
+     * @param Doc2Convert2JPEG     PDF to convert pages from
      * @param destinationDirectory saving directory
-     * @param Pages2Convert ArrayList to track which pages should be converted
-     * @param DPI sets quality of created JPEG
+     * @param Pages2Convert        ArrayList to track which pages should be converted
+     * @param DPI                  sets quality of created JPEG
      */
-    public void convertPDF2JPEGs (File Doc2Convert2JPEG, String destinationDirectory,
-                                  ArrayList<Boolean> Pages2Convert, float DPI){
+    public void convertPDF2JPEGs(File Doc2Convert2JPEG, String destinationDirectory,
+                                 ArrayList<Boolean> Pages2Convert, float DPI) {
 
         /*ArrayList<Boolean> Pages2Convert = new ArrayList<>();
         Pages2Convert.add(true);
@@ -198,37 +201,40 @@ public class Driver {
         Pages2Convert.add(false);
 
         driver.convertPDF2JPEGs(driver.chooseDoc(),driver.chooseSaveDirectory(),Pages2Convert,400);*/
-        try{
-            try{
-            PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG, MemoryUsageSetting.setupTempFileOnly());
-            int numberOfPages = extractionPDF.getNumberOfPages();
-            PDFRenderer renderer = new PDFRenderer(extractionPDF);
-            for(int i=0; i < numberOfPages;i++){
-                if(Pages2Convert.get(i)){
-                    BufferedImage  image = renderer.renderImageWithDPI(i,DPI,ImageType.RGB);
-                    ImageIO.write(image,"JPEG",new File(
-                            destinationDirectory+"\\converted Image"+i+".jpeg"));
+        try {
+            try {
+                PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG, MemoryUsageSetting.setupTempFileOnly());
+                int numberOfPages = extractionPDF.getNumberOfPages();
+                PDFRenderer renderer = new PDFRenderer(extractionPDF);
+                for (int i = 0; i < numberOfPages; i++) {
+                    if (Pages2Convert.get(i)) {
+                        BufferedImage image = renderer.renderImageWithDPI(i, DPI, ImageType.RGB);
+                        ImageIO.write(image, "JPEG", new File(
+                                destinationDirectory + "\\converted Image" + i + ".jpeg"));
+                    }
                 }
-            }
-            extractionPDF.close();
-            }catch(InvalidPasswordException invalidPasswordException){
+                extractionPDF.close();
+            } catch (InvalidPasswordException invalidPasswordException) {
                 PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG,
                         JOptionPane.showInputDialog(null,
-                                Doc2Convert2JPEG.getName()+" is password protected. " +
+                                Doc2Convert2JPEG.getName() + " is password protected. " +
                                         "Please enter the password to open the document"),
-                                MemoryUsageSetting.setupTempFileOnly());
+                        MemoryUsageSetting.setupTempFileOnly());
                 int numberOfPages = extractionPDF.getNumberOfPages();
                 System.out.println(numberOfPages);
                 PDFRenderer renderer = new PDFRenderer(extractionPDF);
-                for(int i=0; i < numberOfPages;i++){
-                    if(Pages2Convert.get(i)){
-                        BufferedImage  image = renderer.renderImageWithDPI(i,DPI,ImageType.RGB);
-                        ImageIO.write(image,"JPEG",new File(
-                                destinationDirectory+"\\converted Image"+i+".jpeg"));
+                for (int i = 0; i < numberOfPages; i++) {
+                    if (Pages2Convert.get(i)) {
+                        BufferedImage image = renderer.renderImageWithDPI(i, DPI, ImageType.RGB);
+                        ImageIO.write(image, "JPEG", new File(
+                                destinationDirectory + "\\converted Image" + i + ".jpeg"));
                     }
                 }
-                extractionPDF.close();}
-        }catch(Exception ex){ex.printStackTrace();}
+                extractionPDF.close();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
     }
 
@@ -237,12 +243,13 @@ public class Driver {
      * and an ArrayList with Booleans for determining which pages will have to be removed. The method iterates
      * through the Pages2Remove list until it finds a "true" and then removes it and the page with the same index
      * from the PDF document
-     * @param Doc2RemovePagesFrom Initial PDF-File to remove pages from
+     *
+     * @param Doc2RemovePagesFrom  Initial PDF-File to remove pages from
      * @param destinationDirectory saving directory
-     * @param Pages2Remove ArrayList containing booleans for pages to remove(true)
+     * @param Pages2Remove         ArrayList containing booleans for pages to remove(true)
      */
     public void removePagesFromPDF(File Doc2RemovePagesFrom, String destinationDirectory,
-                                   ArrayList<Boolean> Pages2Remove){
+                                   ArrayList<Boolean> Pages2Remove) {
 
         /*Unit Testing:
         ArrayList<Boolean> Pages2Remove = new ArrayList<>();
@@ -257,23 +264,23 @@ public class Driver {
         System.out.println(Pages2Remove);
 
         driver.removePagesFromPDF(driver.chooseDoc(),driver.chooseSaveDirectory(),Pages2Remove);*/
-        try{
-            try{
-            PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom);
-            int numberOfPages = pageRemovalPDF.getNumberOfPages();
-            System.out.println(numberOfPages);
-            while(Pages2Remove.contains(true)) {
-                for (int i = 0; i < numberOfPages; i++) {
-                    if (Pages2Remove.get(i)) {
-                        pageRemovalPDF.removePage(i);
-                        Pages2Remove.remove(i);
+        try {
+            try {
+                PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom);
+                int numberOfPages = pageRemovalPDF.getNumberOfPages();
+                System.out.println(numberOfPages);
+                while (Pages2Remove.contains(true)) {
+                    for (int i = 0; i < numberOfPages; i++) {
+                        if (Pages2Remove.get(i)) {
+                            pageRemovalPDF.removePage(i);
+                            Pages2Remove.remove(i);
 
-                        break;
+                            break;
+                        }
                     }
                 }
-            }
-            pageRemovalPDF.save(destinationDirectory+"\\PagesRemoved.pdf");
-            }catch(InvalidPasswordException invalidPasswordException) {
+                pageRemovalPDF.save(destinationDirectory + "\\PagesRemoved.pdf");
+            } catch (InvalidPasswordException invalidPasswordException) {
                 PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom,
                         JOptionPane.showInputDialog(null,
                                 Doc2RemovePagesFrom.getName() + " is password protected. " +
@@ -291,44 +298,47 @@ public class Driver {
                     }
                 }
             }
-        }catch (Exception ex){ex.printStackTrace();}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
     /**
      * This method is used for compressing a given PDF-File. It turns every page of the File into a JPEG-File which
      * can me saved with the given quality (compressionDPI).
-     * @param Doc2Compress file to compress
+     *
+     * @param Doc2Compress         file to compress
      * @param destinationDirectory saving directory
-     * @param compressionDPI float to determine compression quality
+     * @param compressionDPI       float to determine compression quality
      */
-    public void compressPDF(File Doc2Compress, String destinationDirectory, float compressionDPI ){
+    public void compressPDF(File Doc2Compress, String destinationDirectory, float compressionDPI) {
 
 
         try {
-            try{
-        PDDocument pdDocument = new PDDocument();
-        PDDocument oDocument = PDDocument.load(Doc2Compress);
-        PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
-        int numberOfPages = oDocument.getNumberOfPages();
-        PDPage page;
+            try {
+                PDDocument pdDocument = new PDDocument();
+                PDDocument oDocument = PDDocument.load(Doc2Compress);
+                PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
+                int numberOfPages = oDocument.getNumberOfPages();
+                PDPage page;
 
-        for (int i = 0; i < numberOfPages; i++) {
-            page = new PDPage(PDRectangle.LETTER);
-            BufferedImage bim = pdfRenderer.renderImageWithDPI(i,compressionDPI, ImageType.RGB);
-            PDImageXObject pdImage = JPEGFactory.createFromImage(pdDocument, bim);
-            PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page);
-            float newHeight = PDRectangle.LETTER.getHeight();
-            float newWidth = PDRectangle.LETTER.getWidth();
-            contentStream.drawImage(pdImage, 0, 0, newWidth, newHeight);
-            contentStream.close();
+                for (int i = 0; i < numberOfPages; i++) {
+                    page = new PDPage(PDRectangle.LETTER);
+                    BufferedImage bim = pdfRenderer.renderImageWithDPI(i, compressionDPI, ImageType.RGB);
+                    PDImageXObject pdImage = JPEGFactory.createFromImage(pdDocument, bim);
+                    PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page);
+                    float newHeight = PDRectangle.LETTER.getHeight();
+                    float newWidth = PDRectangle.LETTER.getWidth();
+                    contentStream.drawImage(pdImage, 0, 0, newWidth, newHeight);
+                    contentStream.close();
 
-            pdDocument.addPage(page);
-        }
-        //File compressedFile = new File(destinationDirectory + "_cpmpressed" + ".pdf");
-        pdDocument.save(destinationDirectory+"\\compressedFile.pdf");
-        pdDocument.close();
-            }catch(InvalidPasswordException invalidPasswordException) {
+                    pdDocument.addPage(page);
+                }
+                //File compressedFile = new File(destinationDirectory + "_cpmpressed" + ".pdf");
+                pdDocument.save(destinationDirectory + "\\compressedFile.pdf");
+                pdDocument.close();
+            } catch (InvalidPasswordException invalidPasswordException) {
                 PDDocument pdDocument = new PDDocument();
                 PDDocument oDocument = PDDocument.load(Doc2Compress,
                         JOptionPane.showInputDialog(null,
@@ -353,21 +363,21 @@ public class Driver {
             }
 
 
-    } catch (IOException e) {
-        e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-}
 
     /**
      * This method splits a PDF Document in variable smaller PDF Documents. It needs input from the user regarding
      * the saving directory, the number of PDFs to create and the Pages at which the PDFs have to be split.
      *
      * @param destinationDirectory saving directory
-     * @param Doc2Split the Document which has to be split
-     * @param splitPointList ArrayList which takes the Page-Points at which the Document has to be split
+     * @param Doc2Split            the Document which has to be split
+     * @param splitPointList       ArrayList which takes the Page-Points at which the Document has to be split
      */
-    public void splitPDFDocs (String destinationDirectory, File Doc2Split,
-                              ArrayList<Integer> splitPointList, MainFrame mainFrame) {
+    public void splitPDFDocs(String destinationDirectory, File Doc2Split,
+                             ArrayList<Integer> splitPointList, MainFrame mainFrame) {
 
         /*ArrayList<Integer> splitPointList = new ArrayList<>();
         splitPointList.add(0);
@@ -468,65 +478,99 @@ public class Driver {
 
                 }
             }
-        }catch (Exception ex) {ex.printStackTrace();JOptionPane.showMessageDialog(mainFrame,"Error while splitting PDF!");}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame, "Error while splitting PDF!");
         }
-
+    }
 
 
     /**
      * Standard merge method (PDFBox) to merge PDF Documents. It utilizes an ArrayList to track all the documents
      * that have to be merged
+     *
      * @param destinationDirectory saving directory
-     * @param mergeList list of PDFs to merge
+     * @param mergeList            list of PDFs to merge
      */
-    public void mergePDFDocs (String destinationDirectory, ArrayList<File> mergeList, MainFrame mainFrame){
+    public void mergePDFDocs(String destinationDirectory, ArrayList<File> mergeList, MainFrame mainFrame) {
         PDFMergerUtility PDFmerger = new PDFMergerUtility();
-        PDFmerger.setDestinationFileName(destinationDirectory+"\\mergedPDFs.pdf");
+        PDFmerger.setDestinationFileName(destinationDirectory + "\\mergedPDFs.pdf");
         try {
             for (int i = 0; i < mergeList.size(); i++) {
                 File file = new File(mergeList.get(i).getAbsolutePath());
                 PDFmerger.addSource(file);
             }
             PDFmerger.mergeDocuments(null);
-            JOptionPane.showMessageDialog(mainFrame,"Files successfully merged!");
+            JOptionPane.showMessageDialog(mainFrame, "Files successfully merged!");
             mainFrame.getCurrentPanel().setVisible(false);
             mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
-        }catch (Exception ex){ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(mainFrame, "Error while merging files!");
             mainFrame.getCurrentPanel().setVisible(false);
             mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
             mainFrame.getCurrentPanel().revalidate();
         }
-}
+    }
 
 
-public ArrayList<File> addDocs2MergeList (ArrayList<File> mergeList, File file2Add){
+    public ArrayList<File> addDocs2MergeList(ArrayList<File> mergeList, File file2Add) {
         mergeList.add(file2Add);
         return mergeList;
     }
-public File chooseDoc(){
+
+    public File chooseDoc(MainFrame mainFrame) {
         JFileChooser fileChoose = new JFileChooser("C:\\Arinhobag");
-        fileChoose.showOpenDialog(null);
+        fileChoose.showOpenDialog(mainFrame);
         return fileChoose.getSelectedFile();
-}
+    }
 
-public String chooseSaveDirectory (MainFrame mainFrame){
-    JFileChooser fileSave = new JFileChooser("C:\\Arinhobag");
-    fileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    fileSave.showOpenDialog(mainFrame);
-    return fileSave.getSelectedFile().getAbsolutePath();
-}
+    public String chooseSaveDirectory(MainFrame mainFrame) {
+        JFileChooser fileSave = new JFileChooser("C:\\Arinhobag");
+        fileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileSave.showOpenDialog(mainFrame);
+        return fileSave.getSelectedFile().getAbsolutePath();
+    }
 
-public String[] createRangeArray(int start, int end){
+    public String[] createRangeArray(int start, int end) {
         IntStream stream = IntStream.range(start, end);
         int[] intRange = stream.toArray();
 
         String[] stringRange = new String[intRange.length];
-        for (int i=0;i<intRange.length;i++){
-            stringRange[i]=String.valueOf(intRange[i]);
+        for (int i = 0; i < intRange.length; i++) {
+            stringRange[i] = String.valueOf(intRange[i]);
         }
 
-return stringRange;
-}
+        return stringRange;
+    }
+
+    public PDDocument handlePDFEncryption(File doc2Handle, MainFrame mainFrame) {
+        PDDocument handledDoc = new PDDocument();
+        try {
+            try {
+                handledDoc = PDDocument.load(doc2Handle);
+
+            } catch (InvalidPasswordException invalidPasswordException) {
+
+                 handledDoc = PDDocument.load(doc2Handle,
+                        JOptionPane.showInputDialog(mainFrame,
+                                doc2Handle.getName() + " is password protected. " +
+                                        "Please enter the password to open the document"));
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(mainFrame, "Password incorrect!");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame, "Error while loading file!");
+        }
+
+            handledDoc.setAllSecurityToBeRemoved(true);
+            return  handledDoc;
+
+
+    }
 
 }

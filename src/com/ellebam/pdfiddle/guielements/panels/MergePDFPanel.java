@@ -112,7 +112,7 @@ public class MergePDFPanel extends JPanel {
             public void mouseClicked (MouseEvent e) {
                 super.mouseClicked(e);
                 try {
-                    mergeDriver.addDocs2MergeList(mergeFileList,mergeDriver.chooseDoc());
+                    mergeDriver.addDocs2MergeList(mergeFileList,mergeDriver.chooseDoc(mainFrame));
                     mergeFileList.removeIf(Objects::isNull);
 
                 }catch (Exception ex) {

@@ -70,13 +70,23 @@ public class SplitPDFPanel extends JPanel {
             public void mouseClicked(MouseEvent e){
                 super.mouseClicked(e);
                 ArrayList<String[]> stringRangeList = new ArrayList<>();
+                PDDocument selectedPDF;
+               /* try{
+                    try {
+                        selectedPDF = PDDocument.load(doc2Split);
+                    }catch
+                }*/
 
                 if(comboSelectionPanel.getComboBox().getSelectedIndex()==0){
                     splitDriver.splitPDFDocs(splitDriver.chooseSaveDirectory(mainFrame),
-                            splitDriver.chooseDoc(),splitPointList,mainFrame);
+                            splitDriver.chooseDoc(mainFrame),splitPointList,mainFrame);
                 }else{
                 for(int i=0; i<comboSelectionPanel.getComboBox().getSelectedIndex();i++){
-                    //continue here!!
+                    if(stringRangeList.size()>0){
+
+                    }else{
+                        //splitDriver.createRangeArray(1,);
+                    }
                 }
 
 
@@ -97,11 +107,14 @@ public class SplitPDFPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+
                 if (fileHandlerPanel.getComponentCount() > 1){
                     fileHandlerPanel.remove(1);
                 }
                 try{
-                    doc2Split = splitDriver.chooseDoc();
+                    doc2Split = File.createTempFile("temp",null);
+                    PDF2Split =splitDriver.handlePDFEncryption(splitDriver.chooseDoc(mainFrame),mainFrame);
+                    PDF2Split.save(doc2Split);
                     filePreviewPanel = new FilePreviewPanel(doc2Split,mainFrame,0);
                     fileHandlerPanel.add(filePreviewPanel);
                     comboSelectionPanel.setVisible(true);
