@@ -26,6 +26,7 @@ public class SplitPDFPanel extends JPanel {
     private ComboSelectionPanel comboSelectionPanel;
     private String[] splitNumCombo = {"0","1","2","3","4","5"};
     private FilePreviewPanel filePreviewPanel;
+    private PDDocument selectedPDF;
 
 
 
@@ -70,27 +71,51 @@ public class SplitPDFPanel extends JPanel {
             public void mouseClicked(MouseEvent e){
                 super.mouseClicked(e);
                 ArrayList<String[]> stringRangeList = new ArrayList<>();
-                PDDocument selectedPDF;
-               /* try{
+                splitPointList = new ArrayList<>();
+                splitPointList.add(0);
+                String saveDirectory = splitDriver.chooseSaveDirectory(mainFrame);
+
+
                     try {
                         selectedPDF = PDDocument.load(doc2Split);
-                    }catch
-                }*/
+                    }catch(Exception ex) {
+                        ex.printStackTrace(); JOptionPane.showMessageDialog(mainFrame,"Error while loading!");
+                    }
+
 
                 if(comboSelectionPanel.getComboBox().getSelectedIndex()==0){
-                    splitDriver.splitPDFDocs(splitDriver.chooseSaveDirectory(mainFrame),
-                            splitDriver.chooseDoc(mainFrame),splitPointList,mainFrame);
+
+                    splitDriver.splitPDFDocs(saveDirectory,
+                            doc2Split,splitPointList,mainFrame);
                 }else{
                 for(int i=0; i<comboSelectionPanel.getComboBox().getSelectedIndex();i++){
-                    if(stringRangeList.size()>0){
+                    if(stringRangeList.size()==0){
+                        stringRangeList.add(splitDriver.createRangeArray(1,selectedPDF.getNumberOfPages()));
+                        int splitPointInt = Integer.parseInt((String) JOptionPane.showInputDialog(mainFrame,
+                                        "Please choose the split point "+ i+1, "Split Points",
+                                        JOptionPane.QUESTION_MESSAGE,null,stringRangeList.get(i),null));
 
+                        splitPointList.add(splitPointInt);
                     }else{
-                        //splitDriver.createRangeArray(1,);
+                        stringRangeList.add(splitDriver.createRangeArray(splitPointList.get(i)+1,selectedPDF.getNumberOfPages()));
+                        int splitPointInt = Integer.parseInt((String) JOptionPane.showInputDialog(mainFrame,
+                                "Please choose the split point "+ i+1, "Split Points",
+                                JOptionPane.QUESTION_MESSAGE,null,stringRangeList.get(i),null));
+
+                        splitPointList.add(splitPointInt);
+
+                    }
+                    if(splitPointList.get(i+1)==selectedPDF.getNumberOfPages()-1){
+                        splitPointList.add(selectedPDF.getNumberOfPages());
+                        break;
                     }
                 }
 
 
                 }
+
+                splitDriver.splitPDFDocs(saveDirectory,
+                        doc2Split,splitPointList,mainFrame);
             }
 
 

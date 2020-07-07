@@ -521,12 +521,14 @@ public class Driver {
 
     public File chooseDoc(MainFrame mainFrame) {
         JFileChooser fileChoose = new JFileChooser("C:\\Arinhobag");
+        fileChoose.setDialogTitle("Choose a file");
         fileChoose.showOpenDialog(mainFrame);
         return fileChoose.getSelectedFile();
     }
 
     public String chooseSaveDirectory(MainFrame mainFrame) {
         JFileChooser fileSave = new JFileChooser("C:\\Arinhobag");
+        fileSave.setDialogTitle("Choose a saving directory");
         fileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileSave.showOpenDialog(mainFrame);
         return fileSave.getSelectedFile().getAbsolutePath();
