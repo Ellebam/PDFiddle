@@ -15,6 +15,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+/**
+ * This panel represents the Panel in which the user can split a PDF File into smaller PDFs. It uses the
+ * splitPDFDocs() method
+ */
 public class SplitPDFPanel extends JPanel {
     private SplitPDFPanel splitPDFPanel;
     private SelectDocPseudoButton selectDocPseudoButton = new SelectDocPseudoButton();
@@ -50,8 +54,6 @@ public class SplitPDFPanel extends JPanel {
 
 
 
-
-
         ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Split");
         controlButtonCarrier.setAlignmentY(BOTTOM_ALIGNMENT);
         controlButtonCarrier.backButton.addMouseListener(new MouseAdapter()
@@ -64,7 +66,11 @@ public class SplitPDFPanel extends JPanel {
 
             }
         });
-
+        /**
+         * The operator button triggers the whole routine to split a PDF-Document. It will get the number of selected
+         * splitPointNumber from the ComboBox (displayed by selectPseudoButton) and ask the user about its desired split
+         * points through a inputDialog
+         */
         controlButtonCarrier.operatorButton.addMouseListener(new MouseAdapter()
         {
             @Override
@@ -91,15 +97,17 @@ public class SplitPDFPanel extends JPanel {
                 for(int i=0; i<comboSelectionPanel.getComboBox().getSelectedIndex();i++){
                     if(stringRangeList.size()==0){
                         stringRangeList.add(splitDriver.createRangeArray(1,selectedPDF.getNumberOfPages()));
+                        int f= i+1;
                         int splitPointInt = Integer.parseInt((String) JOptionPane.showInputDialog(mainFrame,
-                                        "Please choose the split point "+ i+1, "Split Points",
+                                        "Please choose  split point "+ f, "Split Points",
                                         JOptionPane.QUESTION_MESSAGE,null,stringRangeList.get(i),null));
 
                         splitPointList.add(splitPointInt);
                     }else{
                         stringRangeList.add(splitDriver.createRangeArray(splitPointList.get(i)+1,selectedPDF.getNumberOfPages()));
+                        int f= i+1;
                         int splitPointInt = Integer.parseInt((String) JOptionPane.showInputDialog(mainFrame,
-                                "Please choose the split point "+ i+1, "Split Points",
+                                "Please choose  split point "+ f, "Split Points",
                                 JOptionPane.QUESTION_MESSAGE,null,stringRangeList.get(i),null));
 
                         splitPointList.add(splitPointInt);
@@ -113,7 +121,7 @@ public class SplitPDFPanel extends JPanel {
 
 
                 }
-
+                splitPointList.add(selectedPDF.getNumberOfPages());
                 splitDriver.splitPDFDocs(saveDirectory,
                         doc2Split,splitPointList,mainFrame);
             }

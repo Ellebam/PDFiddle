@@ -85,7 +85,7 @@ public class MergePDFPanel extends JPanel {
                     JOptionPane.showMessageDialog(mainFrame,"Add more documents to merge!");
                 }else{
 
-                    mergeDriver.mergePDFDocs(mergeDriver.chooseSaveDirectory(mainFrame), mergeFileList, mainFrame);
+                    mergeDriver.mergePDFDocs(mergeDriver.chooseSaveDirectory(mainFrame),"", mergeFileList, mainFrame);
                     mergeFileList.removeAll(mergeFileList);
                     mergePDFPanel.repaint();
 
