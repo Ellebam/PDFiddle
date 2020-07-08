@@ -93,6 +93,7 @@ public class SplitPDFPanel extends JPanel {
 
                     splitDriver.splitPDFDocs(saveDirectory,
                             doc2Split,splitPointList,mainFrame);
+                    splitDriver.changeCurrentPanel(new SplitPDFPanel(mainFrame),mainFrame);
                 }else{
                 for(int i=0; i<comboSelectionPanel.getComboBox().getSelectedIndex();i++){
                     if(stringRangeList.size()==0){
@@ -124,6 +125,7 @@ public class SplitPDFPanel extends JPanel {
                 splitPointList.add(selectedPDF.getNumberOfPages());
                 splitDriver.splitPDFDocs(saveDirectory,
                         doc2Split,splitPointList,mainFrame);
+                splitDriver.changeCurrentPanel(new SplitPDFPanel(mainFrame),mainFrame);
             }
 
 

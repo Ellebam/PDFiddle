@@ -390,12 +390,12 @@ public class Driver {
                 Iterator<PDDocument> iterator = Pages.listIterator();
 
                 int i;
-                if (splitPointList.size() < 2) {
+                if (splitPointList.size() < 3) {
                     i = 1;
                     while (iterator.hasNext()) {
                         PDDocument temporalDocument = iterator.next();
                         temporalDocument.save(destinationDirectory +"\\splitPDF_"+ i++ + ".pdf");
-                    }
+                    }JOptionPane.showMessageDialog(mainFrame,"File successfully split!");
                 } else {
                     i = 0;
                     while (iterator.hasNext()) {
@@ -412,7 +412,7 @@ public class Driver {
                             i++;
                         }
                         int x = u + 1;
-                        mergePDFDocs(destinationDirectory,"split Nr" + x+" ", mergeList, mainFrame);
+                        mergePDFDocsNoMessage(destinationDirectory,"split Nr" + x+" ", mergeList, mainFrame);
                         System.out.println("Number " + x + " of new documents created");
                     }
                     for (int z = (splitPointList.get(splitPointList.size() - 1)) - 1; z > -1; z--) {
@@ -423,7 +423,7 @@ public class Driver {
                         } else System.out.println(destinationDirectory +"\\temp_"+ z + ".pdf not deleted");
                     }
 
-                }
+                }JOptionPane.showMessageDialog(mainFrame,"File successfully split!");
                 document.close();
             } catch (InvalidPasswordException invalidPasswordException) {
 
@@ -441,7 +441,7 @@ public class Driver {
                     while (iterator.hasNext()) {
                         PDDocument temporalDocument = iterator.next();
                         temporalDocument.save(destinationDirectory +"\\splitPDF_"+ i++ + ".pdf");
-                    }
+                    }JOptionPane.showMessageDialog(mainFrame,"File successfully split!");
                 } else {
                     i = 0;
                     while (iterator.hasNext()) {
@@ -458,7 +458,7 @@ public class Driver {
                             i++;
                         }
                         int x = u + 1;
-                        mergePDFDocs(destinationDirectory,"split Nr" + x+" ", mergeList, mainFrame);
+                        mergePDFDocsNoMessage(destinationDirectory,"split Nr" + x+" ", mergeList, mainFrame);
                         System.out.println("Number " + x + " of new documents created");
                     }
                     for (int z = (splitPointList.get(splitPointList.size() - 1)) - 1; z > -1; z--) {
@@ -469,7 +469,7 @@ public class Driver {
                         } else System.out.println(destinationDirectory +"\\temp_"+ z + ".pdf not deleted");
                     }
 
-                }
+                }JOptionPane.showMessageDialog(mainFrame,"File successfully split!");
                 document.close();
             }
         } catch (Exception ex) {
@@ -501,12 +501,35 @@ public class Driver {
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(mainFrame, "Error while merging files!");
-            mainFrame.getCurrentPanel().setVisible(false);
-            mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
-            mainFrame.getCurrentPanel().revalidate();
+
         }
     }
 
+    /**
+     * this method is the same as mergePDFDocs, only without the messageDialog (used for other methods to manipulate
+     * PDFs in which the messageDialog isn't wished
+     * @param destinationDirectory
+     * @param x
+     * @param mergeList
+     * @param mainFrame
+     */
+    public void mergePDFDocsNoMessage(String destinationDirectory,String x, ArrayList<File> mergeList, MainFrame mainFrame) {
+        PDFMergerUtility PDFmerger = new PDFMergerUtility();
+        PDFmerger.setDestinationFileName(destinationDirectory + "\\"+x+"mergedPDF.pdf");
+        try {
+            for (int i = 0; i < mergeList.size(); i++) {
+                File file = new File(mergeList.get(i).getAbsolutePath());
+                PDFmerger.addSource(file);
+            }
+            PDFmerger.mergeDocuments(null);
+            mainFrame.getCurrentPanel().setVisible(false);
+            mainFrame.setAndAddCurrentPanel(new MergePDFPanel(mainFrame));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame, "Error while processing files!");
+
+        }
+    }
 
     public ArrayList<File> addDocs2MergeList(ArrayList<File> mergeList, File file2Add) {
         mergeList.add(file2Add);
@@ -567,6 +590,17 @@ public class Driver {
             return  handledDoc;
 
 
+    }
+
+    public void changeCurrentPanel (JPanel newPanel, MainFrame mainFrame){
+        mainFrame.getCurrentPanel().setVisible(false);
+        mainFrame.setAndAddCurrentPanel(newPanel);
+        mainFrame.getCurrentPanel().revalidate();
+    }
+
+
+    public void displayUserMessage (String variableString,MainFrame mainFrame){
+        JOptionPane.showMessageDialog(mainFrame,variableString);
     }
 
 }
