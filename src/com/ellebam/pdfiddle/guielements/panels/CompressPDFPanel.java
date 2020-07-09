@@ -48,7 +48,7 @@ public class CompressPDFPanel extends JPanel {
         comboSelectionPanel.setVisible(false);
         fileHandlerPanel.add(Box.createRigidArea(new Dimension(30,10)));
 
-        ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Split");
+        ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Compress");
         controlButtonCarrier.setAlignmentY(BOTTOM_ALIGNMENT);
         controlButtonCarrier.backButton.addMouseListener(new MouseAdapter()
         {
@@ -67,9 +67,9 @@ public class CompressPDFPanel extends JPanel {
                 super.mouseClicked(e);
                 String saveDirectory = compressionDriver.chooseSaveDirectory(mainFrame);
                 if (comboSelectionPanel.getComboBox().getSelectedIndex() == 0){
-                    compressionDriver.compressPDF(doc2Compress,saveDirectory,300, mainFrame);
+                    compressionDriver.compressPDF(doc2Compress,saveDirectory,150, mainFrame);
                 }else if (comboSelectionPanel.getComboBox().getSelectedIndex() == 1){
-                    compressionDriver.compressPDF(doc2Compress,saveDirectory,200, mainFrame);
+                    compressionDriver.compressPDF(doc2Compress,saveDirectory,130, mainFrame);
                 }else if (comboSelectionPanel.getComboBox().getSelectedIndex() == 2){
                     compressionDriver.compressPDF(doc2Compress,saveDirectory,100, mainFrame);
                 }
