@@ -63,7 +63,6 @@ public class SplitPDFPanel extends JPanel {
                 super.mouseClicked(e);
                 splitPDFPanel.setVisible(false);
                 mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
-
             }
         });
         /**

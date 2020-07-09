@@ -55,7 +55,7 @@ public class OpeningPanel extends JPanel {
         addIcon2Pseudobutton(mergePseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/mergePDF_Icon.png");
         addIcon2Pseudobutton(splitPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/splitPDF_Icon.png");
 
-        //adding Mouselisteners (opening corresponding new Panel)
+        //adding Mouselisteners (opening corresponding new merge & split PDF Pseudobuttons)
         mergePseudoButton.addMouseListener((new MouseAdapter(){
             @Override
             public void mouseClicked (MouseEvent e){
@@ -76,7 +76,6 @@ public class OpeningPanel extends JPanel {
 
 
 
-
         //PseudoButtonCarrier for compressPDF Pseudobutton
         SmallLabelPanel compressSmallLabelPanel = new SmallLabelPanel(new SmallLabel("PDF-Compressor"));
         OpeningPanelPseudoButton compressPseudoButton = new OpeningPanelPseudoButton(compressSmallLabelPanel);
@@ -85,6 +84,16 @@ public class OpeningPanel extends JPanel {
         PseudoButtonCarrier compressCarrier = new PseudoButtonCarrier(compressLabelPanel,
                 compressPseudoButton);
         addIcon2Pseudobutton(compressPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/compressPDF_Icon.png");
+
+        //adding Mouselistener for compressPseudoButton
+        compressPseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseClicked (MouseEvent e){
+                super.mouseClicked(e);
+                openingPanel.setVisible(false);
+                mainFrame.setAndAddCurrentPanel(new CompressPDFPanel(mainFrame));
+            }
+        }));
 
         //PseudoButtonCarrier for removePagesPDF Pseudobutton
         SmallLabelPanel pageRemoverSmallLabelPanel = new SmallLabelPanel(new SmallLabel("Page Remover"));

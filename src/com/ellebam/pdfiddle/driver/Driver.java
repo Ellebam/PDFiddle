@@ -1,6 +1,7 @@
 package com.ellebam.pdfiddle.driver;
 
 import com.ellebam.pdfiddle.guielements.MainFrame;
+import com.ellebam.pdfiddle.guielements.panels.CompressPDFPanel;
 import com.ellebam.pdfiddle.guielements.panels.MergePDFPanel;
 import com.ellebam.pdfiddle.guielements.panels.OpeningPanel;
 import com.ellebam.pdfiddle.guielements.panels.SplitPDFPanel;
@@ -47,7 +48,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new CompressPDFPanel(mainFrame));
 
     }
 
@@ -312,10 +313,10 @@ public class Driver {
      * @param destinationDirectory saving directory
      * @param compressionDPI       float to determine compression quality
      */
-    public void compressPDF(File Doc2Compress, String destinationDirectory, float compressionDPI) {
+    public void compressPDF(File Doc2Compress, String destinationDirectory, float compressionDPI, MainFrame mainframe) {
 
 
-        try {
+
             try {
                 PDDocument pdDocument = new PDDocument();
                 PDDocument oDocument = PDDocument.load(Doc2Compress);
@@ -334,37 +335,18 @@ public class Driver {
                     contentStream.close();
 
                     pdDocument.addPage(page);
+                    System.out.println("Page "+i+" compressed");
                 }
-                //File compressedFile = new File(destinationDirectory + "_cpmpressed" + ".pdf");
+                //File compressedFile = new File(destinationDirectory + "_compressed" + ".pdf");
                 pdDocument.save(destinationDirectory + "\\compressedFile.pdf");
                 pdDocument.close();
-            } catch (InvalidPasswordException invalidPasswordException) {
-                PDDocument pdDocument = new PDDocument();
-                PDDocument oDocument = PDDocument.load(Doc2Compress,
-                        JOptionPane.showInputDialog(null,
-                                Doc2Compress.getName() + " is password protected. " +
-                                        "Please enter the password to open the document"));
-                PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
-                int numberOfPages = oDocument.getNumberOfPages();
-                PDPage page;
+                JOptionPane.showMessageDialog(mainframe, "Compression successful!");
 
-                for (int i = 0; i < numberOfPages; i++) {
-                    page = new PDPage(PDRectangle.LETTER);
-                    BufferedImage bim = pdfRenderer.renderImageWithDPI(i, compressionDPI, ImageType.RGB);
-                    PDImageXObject pdImage = JPEGFactory.createFromImage(pdDocument, bim);
-                    PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page);
-                    float newHeight = PDRectangle.LETTER.getHeight();
-                    float newWidth = PDRectangle.LETTER.getWidth();
-                    contentStream.drawImage(pdImage, 0, 0, newWidth, newHeight);
-                    contentStream.close();
-
-                    pdDocument.addPage(page);
-                }
-            }
 
 
         } catch (IOException e) {
             e.printStackTrace();
+                JOptionPane.showMessageDialog(mainframe, "Error while compressing file!");
         }
     }
 
