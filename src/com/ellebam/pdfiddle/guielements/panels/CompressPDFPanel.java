@@ -6,6 +6,7 @@ import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
