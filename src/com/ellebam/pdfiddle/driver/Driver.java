@@ -315,29 +315,14 @@ public class Driver {
      * @param compressionDPI       float to determine compression quality
      */
     public void compressPDF(File Doc2Compress, String destinationDirectory, float compressionDPI, MainFrame mainframe) {
-        /*PDDocument pdDocument;
-        PDDocument oDocument = new PDDocument();
-        //PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
-        int numberOfPages = oDocument.getNumberOfPages() ;
-        //PDPage page ;
-        ArrayList<Integer> pageCounter = new ArrayList<>();
-        pageCounter.add(0);
 
-
-
-        try {
-                 pdDocument = new PDDocument();
-                 oDocument = PDDocument.load(Doc2Compress);
-                 //pdfRenderer = new   PDFRenderer(oDocument);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(mainframe, "Error while compressing file!");
-            }*/
 
         ArrayList<Integer> pageCounter = new ArrayList<>();
-        pageCounter.add(0);
         ArrayList<Integer> noOfPages = new ArrayList<>();
+        ArrayList<Boolean> exitList = new ArrayList<>();
+        boolean exit = new Boolean(false);
+        exitList.add(exit);
+
 
 
         Thread t1 = new Thread(() -> {
@@ -345,31 +330,44 @@ public class Driver {
 
             PDDocument pdDocument = new PDDocument();
             PDDocument oDocument = PDDocument.load(Doc2Compress);
-            PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
             int numberOfPages = oDocument.getNumberOfPages() ;
+            System.out.println(numberOfPages);
             noOfPages.add(numberOfPages);
+            PDFRenderer pdfRenderer = new PDFRenderer(oDocument);
 
 
-                for (int i = 0; i < numberOfPages; i++) {
-                    PDPage page = new PDPage(PDRectangle.LETTER);
+                    for (int i = 0; i < numberOfPages; i++) {
+                        if(!exitList.get(0)) {
+                            PDPage page = new PDPage(PDRectangle.LETTER);
 
 
-                    BufferedImage bim = pdfRenderer.renderImageWithDPI(i, compressionDPI, ImageType.RGB);
-                    PDImageXObject pdImage = JPEGFactory.createFromImage(pdDocument, bim);
-                    PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page);
-                    float newHeight = PDRectangle.LETTER.getHeight();
-                    float newWidth = PDRectangle.LETTER.getWidth();
-                    contentStream.drawImage(pdImage, 0, 0, newWidth, newHeight);
-                    contentStream.close();
+                            BufferedImage bim = pdfRenderer.renderImageWithDPI(i, compressionDPI, ImageType.RGB);
+                            PDImageXObject pdImage = JPEGFactory.createFromImage(pdDocument, bim);
+                            PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page);
+                            float newHeight = PDRectangle.LETTER.getHeight();
+                            float newWidth = PDRectangle.LETTER.getWidth();
+                            contentStream.drawImage(pdImage, 0, 0, newWidth, newHeight);
+                            contentStream.close();
 
-                    pdDocument.addPage(page);
-                    System.out.println("Page "+i+" compressed");
-                    pageCounter.add(i);
-                }
-                //File compressedFile = new File(destinationDirectory + "_compressed" + ".pdf");
-                pdDocument.save(destinationDirectory + "\\compressedFile.pdf");
-                pdDocument.close();
-                JOptionPane.showMessageDialog(mainframe, "Compression successful!");
+                            pdDocument.addPage(page);
+                            System.out.println("Page " + i + " compressed");
+                            pageCounter.add(i);
+                            try {
+                                Thread.sleep(50);
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
+                        }else{break; }
+                    }
+
+                    //File compressedFile = new File(destinationDirectory + "_compressed" + ".pdf");
+                    pdDocument.save(destinationDirectory + "\\compressedFile.pdf");
+                    pdDocument.close();
+                    if(!exitList.get(0)) {
+                        JOptionPane.showMessageDialog(mainframe, "Compression finished!");
+                    }else {
+                        JOptionPane.showMessageDialog(mainframe, "Compression terminated!");
+                    }
 
 
 
@@ -379,28 +377,40 @@ public class Driver {
         }
         });
 
+
        Thread t2 = new Thread(() -> {
 
             UIManager.put("ProgressMonitor.progressText", "File Compression");
-            try{
-                Thread.sleep(1000);
-            }catch (Exception ex){ex.printStackTrace();}
+           try {
+               Thread.sleep(1000);
+           }catch(Exception exception){exception.printStackTrace();}
             //creating a ProgressMonitor instance
             ProgressMonitor progressMonitor = new ProgressMonitor(mainframe,
                     "Compressing File", "Compression Start", 0,
                     noOfPages.get(0));
+           System.out.println("progress monitor started");
+           progressMonitor.setMillisToPopup(10);
+            //decide after 50 millis whether to show popup or not
+            progressMonitor.setMillisToDecideToPopup(10);
+            //after deciding if predicted time is longer than 50 show popup
 
-            //decide after 200 millis whether to show popup or not
-            progressMonitor.setMillisToDecideToPopup(50);
-            //after deciding if predicted time is longer than 200 show popup
-            progressMonitor.setMillisToPopup(50);
-            progressMonitor.setNote("Compressing page: " + pageCounter.get(pageCounter.size()-1));
-            progressMonitor.setProgress(pageCounter.get(pageCounter.size()-1));
-            try {
-                //delay task simulation
-                TimeUnit.MILLISECONDS.sleep(50);
-            } catch (InterruptedException ex) {
-                System.err.println(ex);
+            for(int i = 0;i<=noOfPages.get(0);i++) {
+                System.out.println("for: " +i);
+                if(progressMonitor.isCanceled()){
+                    exitList.remove(0);
+                    exitList.add(new Boolean(true));
+                    System.out.println("thread cancelled");
+                    break;
+                }
+                progressMonitor.setNote("Compressing page: " + pageCounter.get(pageCounter.size() - 1));
+                progressMonitor.setProgress(i);
+                try {
+                    //delay task simulation
+                    TimeUnit.MILLISECONDS.sleep(350);
+
+                } catch (InterruptedException ex) {
+                    System.err.println(ex);
+                }
             }
             progressMonitor.setNote("Compression Finished!");
 
@@ -409,6 +419,9 @@ public class Driver {
        t1.start();
        System.out.print(noOfPages);
        t2.start();
+
+
+
     }
 
     /**
@@ -645,5 +658,11 @@ public class Driver {
     public void displayUserMessage (String variableString,MainFrame mainFrame){
         JOptionPane.showMessageDialog(mainFrame,variableString);
     }
+
+    public void stopThread(Thread thread){
+        thread =null;
+    }
+
+
 
 }
