@@ -49,7 +49,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new CompressPDFPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
 
     }
 
@@ -308,22 +308,30 @@ public class Driver {
 
     /**
      * This method is used for compressing a given PDF-File. It turns every page of the File into a JPEG-File which
-     * can me saved with the given quality (compressionDPI).
-     *
-     * @param Doc2Compress         file to compress
-     * @param destinationDirectory saving directory
-     * @param compressionDPI       float to determine compression quality
+     *      * can me saved with the given quality (compressionDPI) and re-converted into a single
+     *      PDF (with the help of mergePDFDocsNoMessage()).
+     * @param Doc2Compress file to compress
+     * @param destinationDirectory Directory for saving compressed file
+     * @param compressionDPI desired compression quality in DPI
+     * @param mainframe parent frame
      */
     public void compressPDF(File Doc2Compress, String destinationDirectory, float compressionDPI, MainFrame mainframe) {
 
 
-        ArrayList<Integer> pageCounter = new ArrayList<>();
-        ArrayList<Integer> noOfPages = new ArrayList<>();
+        ArrayList<Integer> pageCounter = new ArrayList<>(); //used for keeping track of the page at work
+        ArrayList<Integer> noOfPages = new ArrayList<>();  // used for getting the total number of pages dinamically
+
+        //used for tracking if the user wants to stop the compression
         ArrayList<Boolean> exitList = new ArrayList<>();
         boolean exit = new Boolean(false);
         exitList.add(exit);
 
 
+        /**This is the first of two threads. This one (t1) takes the input file (Doc2Compress) and turns its single pages
+         * into buffered images with low quality. It will then merge all pages to one PDDocument again and save it as a
+         * pdf file. It will stop the main for loop (compressing all pages) when the boolean in exitList is turned to
+         * "true" by the other thread (t2)
+         */
 
         Thread t1 = new Thread(() -> {
         try {
@@ -377,7 +385,11 @@ public class Driver {
         }
         });
 
-
+        /** this thread manages the dispaly of the ProgressMonitor. It will get the page number of the document to
+         *  compress and build a screen showing the compression progress of the process. If the user selects "cancel"
+         *  on the ProgressMonitor the exitList will be edited so that the other thread is stopped.
+         *
+         */
        Thread t2 = new Thread(() -> {
 
             UIManager.put("ProgressMonitor.progressText", "File Compression");
@@ -564,10 +576,10 @@ public class Driver {
     /**
      * this method is the same as mergePDFDocs, only without the messageDialog (used for other methods to manipulate
      * PDFs in which the messageDialog isn't wished
-     * @param destinationDirectory
-     * @param x
-     * @param mergeList
-     * @param mainFrame
+     * @param destinationDirectory saving directory
+     * @param x String to widen the filename
+     * @param mergeList List containing the files to merge
+     * @param mainFrame parent container
      */
     public void mergePDFDocsNoMessage(String destinationDirectory,String x, ArrayList<File> mergeList, MainFrame mainFrame) {
         PDFMergerUtility PDFmerger = new PDFMergerUtility();
@@ -659,9 +671,7 @@ public class Driver {
         JOptionPane.showMessageDialog(mainFrame,variableString);
     }
 
-    public void stopThread(Thread thread){
-        thread =null;
-    }
+    
 
 
 

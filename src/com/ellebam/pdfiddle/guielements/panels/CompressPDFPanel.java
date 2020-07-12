@@ -16,7 +16,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class represents the CompressPDFPanel where a file is compressed and saved again.
+ */
 public class CompressPDFPanel extends JPanel {
+
     private CompressPDFPanel compressPDFPanel;
     private SelectDocPseudoButton selectDocPseudoButton = new SelectDocPseudoButton();
     private File doc2Compress;
@@ -34,9 +38,6 @@ public class CompressPDFPanel extends JPanel {
         return PDF2Compress;
     }
 
-    public ArrayList<Integer> getPageCounter() {
-        return pageCounter;
-    }
 
 
     public CompressPDFPanel (MainFrame mainFrame){
@@ -48,9 +49,6 @@ public class CompressPDFPanel extends JPanel {
 
         JPanel selectCarrierPanel = new JPanel();
         selectCarrierPanel.add(selectDocPseudoButton);
-
-
-
 
 
         fileHandlerPanel.setLayout(new BoxLayout(fileHandlerPanel,BoxLayout.Y_AXIS));
@@ -74,6 +72,10 @@ public class CompressPDFPanel extends JPanel {
             }
         });
 
+
+        /**
+         * selecting the operatorbutton will trigger the compressPDF procedure with the selected comrpession quality
+         */
         controlButtonCarrier.operatorButton.addMouseListener(new MouseAdapter()
         {
             @Override
@@ -84,8 +86,6 @@ public class CompressPDFPanel extends JPanel {
 
 
                 if (comboSelectionPanel.getComboBox().getSelectedIndex() == 0){
-
-
                     compressionDriver.compressPDF(doc2Compress,saveDirectory,150, mainFrame);
                 }else if (comboSelectionPanel.getComboBox().getSelectedIndex() == 1){
                     compressionDriver.compressPDF(doc2Compress,saveDirectory,130, mainFrame);
@@ -103,7 +103,9 @@ public class CompressPDFPanel extends JPanel {
         compressPDFPanel.add(fileHandlerPanel);
         compressPDFPanel.add(controlButtonCarrier);
 
-
+/**
+ * The selectDocPseudoButton also triggers the Document preview as a own Panel(icon).
+ */
         selectDocPseudoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -132,35 +134,6 @@ public class CompressPDFPanel extends JPanel {
 
     }
 
-    private static ActionListener createProgressMonitorListener(Component parent, ArrayList<Integer> pageCounter){
-        UIManager.put("ProgressMonitor.progressText", "File Compression");
-        CompressPDFPanel newMater = new CompressPDFPanel((MainFrame)parent);
-        return (ae) -> {
-            new Thread(() -> {
-                UIManager.put("ProgressMonitor.progressText", "File Compression");
-                CompressPDFPanel newMate = new CompressPDFPanel((MainFrame)parent);
-                //creating a ProgressMonitor instance
-                ProgressMonitor progressMonitor = new ProgressMonitor(parent,
-                        "Compressing File", "Compression Start", 0,
-                        newMate.getPDF2Compress().getNumberOfPages());
-
-                //decide after 200 millis whether to show popup or not
-                progressMonitor.setMillisToDecideToPopup(200);
-                //after deciding if predicted time is longer than 200 show popup
-                progressMonitor.setMillisToPopup(200);
-                progressMonitor.setNote("Compressing page: " + pageCounter.get(pageCounter.size() - 1));
-                progressMonitor.setProgress(pageCounter.get(pageCounter.size() - 1));
-                try {
-                    //delay task simulation
-                    TimeUnit.MILLISECONDS.sleep(200);
-                } catch (InterruptedException ex) {
-                    System.err.println(ex);
-                }
-                progressMonitor.setNote("Compression Finished!");
-
-            }).start();
-        };
-    }
 
 
     }
