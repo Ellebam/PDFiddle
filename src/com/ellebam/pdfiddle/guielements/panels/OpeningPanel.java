@@ -9,6 +9,7 @@ import com.ellebam.pdfiddle.guielements.labels.SmallLabel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,8 +20,9 @@ import java.awt.image.BufferedImage;
  * which will lead to the desired functionality when clicked.
  */
 public class OpeningPanel extends JPanel {
-    private OpeningPanel openingPanel;
-    private Driver driver = new Driver();
+    private OpeningPanel        openingPanel;
+    private Driver              driver              =       new Driver();
+
 
 
     /**
