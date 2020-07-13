@@ -1,10 +1,7 @@
 package com.ellebam.pdfiddle.driver;
 
 import com.ellebam.pdfiddle.guielements.MainFrame;
-import com.ellebam.pdfiddle.guielements.panels.CompressPDFPanel;
-import com.ellebam.pdfiddle.guielements.panels.MergePDFPanel;
-import com.ellebam.pdfiddle.guielements.panels.OpeningPanel;
-import com.ellebam.pdfiddle.guielements.panels.SplitPDFPanel;
+import com.ellebam.pdfiddle.guielements.panels.*;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.multipdf.Splitter;
@@ -49,7 +46,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new RemovePagesPanel(mainFrame));
 
     }
 
@@ -671,7 +668,7 @@ public class Driver {
         JOptionPane.showMessageDialog(mainFrame,variableString);
     }
 
-    
+
 
 
 

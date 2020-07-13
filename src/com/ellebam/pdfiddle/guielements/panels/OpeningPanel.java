@@ -104,6 +104,16 @@ public class OpeningPanel extends JPanel {
                 pageRemoverPseudoButton);
         addIcon2Pseudobutton(pageRemoverPseudoButton,"/com/ellebam/pdfiddle/Icons/Own Icons/pageRemoval_icon.png");
 
+        //adding Mouselistener for removePagesPDF Pseudobutton
+        pageRemoverPseudoButton.addMouseListener((new MouseAdapter(){
+            @Override
+            public void mouseClicked (MouseEvent e){
+                super.mouseClicked(e);
+                openingPanel.setVisible(false);
+                mainFrame.setAndAddCurrentPanel(new RemovePagesPanel(mainFrame));
+            }
+        }));
+
         //PseudoButtonCarrier for JPEG2PDF and PDF2JPEG Pseudobuttons
         SmallLabelPanel JPEG2PDFSmallLabelPanel = new SmallLabelPanel(new SmallLabel("JPEG to PDF"));
         OpeningPanelPseudoButton JPEG2PDFPseudoButton = new OpeningPanelPseudoButton(JPEG2PDFSmallLabelPanel);

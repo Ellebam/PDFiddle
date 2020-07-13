@@ -27,13 +27,13 @@ import java.util.Objects;
  * Class representing the Panel for merging PDF Documents
  */
 public class MergePDFPanel extends JPanel {
-    private MergePDFPanel mergePDFPanel;
-    private SelectDocPseudoButton selectDocPseudoButton = new SelectDocPseudoButton();
-    private ArrayList<File> mergeFileList = new ArrayList<>();
-    private JPanel fileHandlerPanel = new JPanel();
-    private JPanel fileCarrierPanel = new JPanel();
-    private Driver mergeDriver = new Driver();
-    private Border border = BorderFactory.createLineBorder(Color.ORANGE,2,true);
+    private MergePDFPanel           mergePDFPanel;
+    private SelectDocPseudoButton   selectDocPseudoButton   = new SelectDocPseudoButton();
+    private ArrayList<File>         mergeFileList           = new ArrayList<>();
+    private JPanel                  fileHandlerPanel        = new JPanel();
+    private JPanel                  fileCarrierPanel        = new JPanel();
+    private Driver                  mergeDriver             = new Driver();
+    private Border                  border                  = BorderFactory.createLineBorder(Color.ORANGE,2,true);
 
     /**
      * Constructor for MergePDFPanel. It takes a MainFrame Object as a parameter for switching back and forth in Panels

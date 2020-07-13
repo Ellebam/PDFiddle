@@ -21,22 +21,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class CompressPDFPanel extends JPanel {
 
-    private CompressPDFPanel compressPDFPanel;
-    private SelectDocPseudoButton selectDocPseudoButton = new SelectDocPseudoButton();
-    private File doc2Compress;
-    private PDDocument PDF2Compress;
-    private JPanel fileHandlerPanel = new JPanel();
-    private FilePreviewPanel filePreviewPanel;
-    private Driver compressionDriver = new Driver();
-    private ComboSelectionPanel comboSelectionPanel;
-    private String[] compressionQualityCombo = {"Low","Medium","High"};
-    private ArrayList<Integer> pageCounter;
-
-
-
-    public PDDocument getPDF2Compress() {
-        return PDF2Compress;
-    }
+    private CompressPDFPanel        compressPDFPanel;
+    private SelectDocPseudoButton   selectDocPseudoButton   = new SelectDocPseudoButton();
+    private File                    doc2Compress;
+    private PDDocument              PDF2Compress;
+    private JPanel                  fileHandlerPanel        = new JPanel();
+    private FilePreviewPanel        filePreviewPanel;
+    private Driver                  compressionDriver       = new Driver();
+    private ComboSelectionPanel     comboSelectionPanel;
+    private String[]                compressionQualityCombo = {"Low","Medium","High"};
 
 
 
