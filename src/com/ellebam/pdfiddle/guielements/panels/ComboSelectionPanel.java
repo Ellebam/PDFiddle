@@ -13,12 +13,12 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.Array;
 
 public class ComboSelectionPanel extends JPanel {
-    private ComboSelectionPanel comboSelectionPanel;
-    private Color panelColor = new SecondaryColor1();
-    private  Dimension arcs = new Dimension(30,30);
-    private SmallLabel panelLabel;
-    private JPanel carrierPanel;
-    private JComboBox comboBox;
+    private ComboSelectionPanel                 comboSelectionPanel;
+    private Color                               panelColor                      = new SecondaryColor1();
+    private Dimension                           arcs                            = new Dimension(30,30);
+    private SmallLabel                          panelLabel;
+    private JPanel                              carrierPanel;
+    private JComboBox                           comboBox;
 
 
 

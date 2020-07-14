@@ -46,7 +46,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new RemovePagesPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new ConvertPDF2JPEGsPanel(mainFrame));
 
     }
 
@@ -189,7 +189,7 @@ public class Driver {
      * @param DPI                  sets quality of created JPEG
      */
     public void convertPDF2JPEGs(File Doc2Convert2JPEG, String destinationDirectory,
-                                 ArrayList<Boolean> Pages2Convert, float DPI) {
+                                 ArrayList<Boolean> Pages2Convert, float DPI, MainFrame mainFrame) {
 
         /*ArrayList<Boolean> Pages2Convert = new ArrayList<>();
         Pages2Convert.add(true);
@@ -200,7 +200,7 @@ public class Driver {
         Pages2Convert.add(false);
 
         driver.convertPDF2JPEGs(driver.chooseDoc(),driver.chooseSaveDirectory(),Pages2Convert,400);*/
-        try {
+        //try {
             try {
                 PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG, MemoryUsageSetting.setupTempFileOnly());
                 int numberOfPages = extractionPDF.getNumberOfPages();
@@ -213,7 +213,7 @@ public class Driver {
                     }
                 }
                 extractionPDF.close();
-            } catch (InvalidPasswordException invalidPasswordException) {
+            /*} catch (InvalidPasswordException invalidPasswordException) {
                 PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG,
                         JOptionPane.showInputDialog(null,
                                 Doc2Convert2JPEG.getName() + " is password protected. " +
@@ -230,7 +230,7 @@ public class Driver {
                     }
                 }
                 extractionPDF.close();
-            }
+            }*/
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -246,25 +246,13 @@ public class Driver {
      * @param Doc2RemovePagesFrom  Initial PDF-File to remove pages from
      * @param destinationDirectory saving directory
      * @param Pages2Remove         ArrayList containing booleans for pages to remove(true)
+     * @param mainFrame            parent frame for displaying content
      */
     public void removePagesFromPDF(File Doc2RemovePagesFrom, String destinationDirectory,
-                                   ArrayList<Boolean> Pages2Remove) {
-
-        /*Unit Testing:
-        ArrayList<Boolean> Pages2Remove = new ArrayList<>();
-        Pages2Remove.add(true);
-        for(int i =0; i<9;i++){
-            Pages2Remove.add(false);
-        }
-        Pages2Remove.add(true);
-        Pages2Remove.add(false);
+                                   ArrayList<Boolean> Pages2Remove, MainFrame mainFrame) {
 
 
-        System.out.println(Pages2Remove);
-
-        driver.removePagesFromPDF(driver.chooseDoc(),driver.chooseSaveDirectory(),Pages2Remove);*/
         try {
-            try {
                 PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom);
                 int numberOfPages = pageRemovalPDF.getNumberOfPages();
                 System.out.println(numberOfPages);
@@ -279,26 +267,11 @@ public class Driver {
                     }
                 }
                 pageRemovalPDF.save(destinationDirectory + "\\PagesRemoved.pdf");
-            } catch (InvalidPasswordException invalidPasswordException) {
-                PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom,
-                        JOptionPane.showInputDialog(null,
-                                Doc2RemovePagesFrom.getName() + " is password protected. " +
-                                        "Please enter the password to open the document"));
-                int numberOfPages = pageRemovalPDF.getNumberOfPages();
-                System.out.println(numberOfPages);
-                while (Pages2Remove.contains(true)) {
-                    for (int i = 0; i < numberOfPages; i++) {
-                        if (Pages2Remove.get(i)) {
-                            pageRemovalPDF.removePage(i);
-                            Pages2Remove.remove(i);
+                JOptionPane.showMessageDialog(mainFrame,"Page removal successful!");
 
-                            break;
-                        }
-                    }
-                }
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame, "Error while removing pages!");
         }
     }
 

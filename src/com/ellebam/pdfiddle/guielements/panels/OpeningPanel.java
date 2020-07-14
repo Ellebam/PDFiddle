@@ -128,6 +128,17 @@ public class OpeningPanel extends JPanel {
         addIcon2Pseudobutton(JPEG2PDFPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/JPEG2PDF_Icon.png");
         addIcon2Pseudobutton(PDF2JPEGPseudoButton,"/com/ellebam/pdfiddle/Icons/Freepik/PDF2JPEG_Icon.png");
 
+        //adding MouseListener for JPEGD2PDF Pseudobutton
+        JPEG2PDFPseudoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                openingPanel.setVisible(false);
+                mainFrame.setAndAddCurrentPanel(new ConvertPDF2JPEGsPanel(mainFrame));
+            }
+        });
+
+
         //PseudoButtonCarrier for encryptPDF and decryptPDF Pseudobuttons
         SmallLabelPanel encryptPDFSmallLabelPanel = new SmallLabelPanel(new SmallLabel("Encrypt PDF"));
         OpeningPanelPseudoButton encryptPDFPseudoButton = new OpeningPanelPseudoButton(encryptPDFSmallLabelPanel);

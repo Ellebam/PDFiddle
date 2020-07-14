@@ -16,30 +16,33 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 
-public class RemovePagesPanel extends JPanel  {
+import static javax.swing.UIManager.get;
 
-    private RemovePagesPanel             removePagesPanel;
-    private SelectDocPseudoButton        selectDocPseudoButton       = new SelectDocPseudoButton();
-    private File                         doc2RemovePages;
-    private PDDocument                   pdf2RemovePages;
-    private WrapLayout                   wrapLayout                  = new WrapLayout();
-    private JPanel                       fileHandlerPanel            = new JPanel(wrapLayout);
-    private JScrollPane                  fileHandlerScroller         = new JScrollPane(fileHandlerPanel);
-    private Driver                       removalDriver               = new Driver();
-    private Color                        removeBorderColor           = new HighlightColor();
-    private Border                       removeItemBorder            = BorderFactory.createLineBorder
-                                                                        (removeBorderColor,5,true);
-    private ArrayList<Boolean>           pages2RemoveList;
+public class ConvertPDF2JPEGsPanel extends JPanel {
+
+    private ConvertPDF2JPEGsPanel           convertPDF2JPEGsPanel;
+    private SelectDocPseudoButton           selectDocPseudoButton           = new SelectDocPseudoButton();
+    private File                            doc2Convert2JPEG;
+    private PDDocument                      pdf2Convert2JPEG;
+    private WrapLayout                      wrapLayout                      = new WrapLayout();
+    private JPanel                          fileHandlerPanel                = new JPanel(wrapLayout);
+    private JScrollPane                     fileHandlerScroller             = new JScrollPane(fileHandlerPanel);
+    private Driver                          pdf2JPEGDriver                  = new Driver();
+    private Color                           pdf2JPEGBorderColor             = new HighlightColor();
+    private Border                          convertItemBorder               = BorderFactory.createLineBorder
+                                                                            (pdf2JPEGBorderColor, 5, true);
+    private ArrayList<Boolean>              pages2ConvertList;
+    private ComboSelectionPanel             comboSelectionPanel;
+    private String[]                        conversionQualityCombo          = {"Low","Medium","High"};
 
 
+    public ConvertPDF2JPEGsPanel(MainFrame mainFrame) {
+        convertPDF2JPEGsPanel = this;
 
-    public RemovePagesPanel (MainFrame mainFrame){
-        removePagesPanel = this;
-
-        removePagesPanel.setLayout((new BoxLayout(removePagesPanel, BoxLayout.Y_AXIS)));
-        removePagesPanel.add(Box.createRigidArea(new Dimension(1000,20)));
+        convertPDF2JPEGsPanel.setLayout((new BoxLayout(convertPDF2JPEGsPanel, BoxLayout.Y_AXIS)));
+        convertPDF2JPEGsPanel.add(Box.createRigidArea(new Dimension(1000, 20)));
         HeaderPanel headerPanel = new HeaderPanel(new HeaderLabel(
-                "Select the PDF-Document to remove pages from"));
+                "Select the PDF-Document to convert pages from"));
 
         JPanel selectCarrierPanel = new JPanel();
         selectCarrierPanel.add(selectDocPseudoButton);
@@ -50,46 +53,53 @@ public class RemovePagesPanel extends JPanel  {
 
 
         fileHandlerPanel.setSize(fileHandlerScroller.getSize());
-
-
         fileHandlerScroller.setBorder(null);
 
 
+        comboSelectionPanel = new ComboSelectionPanel(conversionQualityCombo,"Select JPEG image quality");
+        comboSelectionPanel.getComboBox().setSelectedIndex(1);
+        comboSelectionPanel.setVisible(false);
+
+        JPanel conversionButtonCarrier = new JPanel();
+        ControlButtonCarrier conversionButtons = new ControlButtonCarrier("Select All");
+        conversionButtons.setBackButtonText("Deselect All");
+        conversionButtonCarrier.add(conversionButtons);
+        conversionButtonCarrier.setPreferredSize(new Dimension(fileHandlerScroller.getWidth(),50));
+        conversionButtonCarrier.setVisible(false);
+
 
         //setting up the controlButtons
-        ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Remove");
+        ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Convert");
         controlButtonCarrier.setAlignmentY(BOTTOM_ALIGNMENT);
         //standard BackButton functionality
-        controlButtonCarrier.backButton.addMouseListener(new MouseAdapter()
-        {
+        controlButtonCarrier.backButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                removePagesPanel.setVisible(false);
+                convertPDF2JPEGsPanel.setVisible(false);
                 mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
             }
         });
-        //setting up the RemoveButton to fire the removePagesFromPDF() method. It will take the informations processed
-        //through the previewPanels and the pages2RemoveList (entry true if page should be removed) and save a copy
-        // of the PDF document with the wished pages removed
+        //setting up the ConvertButton to fire the convertPDF2JPEGs() method. It will take the informations processed
+        //through the previewPanels and the pages2RConvertList (entry true if page should be converted) and save the pages
+        //as single JPEG-Files in the desired directory
 
         controlButtonCarrier.operatorButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                removalDriver.removePagesFromPDF(doc2RemovePages, removalDriver.chooseSaveDirectory(mainFrame),
-                        pages2RemoveList, mainFrame);
+
             }
         });
 
-
-
-        removePagesPanel.add(headerPanel);
-        removePagesPanel.add(selectCarrierPanel);
-        removePagesPanel.add(Box.createRigidArea(new Dimension(10,10)));
-        removePagesPanel.add(fileHandlerScroller);
-        removePagesPanel.add(Box.createVerticalGlue());
-        removePagesPanel.add(controlButtonCarrier);
+        convertPDF2JPEGsPanel.add(headerPanel);
+        convertPDF2JPEGsPanel.add(selectCarrierPanel);
+        convertPDF2JPEGsPanel.add(Box.createRigidArea(new Dimension(10,10)));
+        convertPDF2JPEGsPanel.add(comboSelectionPanel);
+        convertPDF2JPEGsPanel.add(conversionButtonCarrier);
+        convertPDF2JPEGsPanel.add(fileHandlerScroller);
+        convertPDF2JPEGsPanel.add(Box.createVerticalGlue());
+        convertPDF2JPEGsPanel.add(controlButtonCarrier);
 
 
 
@@ -104,20 +114,21 @@ public class RemovePagesPanel extends JPanel  {
                     if (fileHandlerPanel.getComponentCount() > 1) {
                         fileHandlerPanel.removeAll();
                     }
+
                     try {
-                        doc2RemovePages = File.createTempFile("temp", null);
-                        pdf2RemovePages = removalDriver.handlePDFEncryption(removalDriver.chooseDoc(mainFrame), mainFrame);
-                        pdf2RemovePages.save(doc2RemovePages);
+                        doc2Convert2JPEG = File.createTempFile("temp", null);
+                        pdf2Convert2JPEG = pdf2JPEGDriver.handlePDFEncryption(pdf2JPEGDriver.chooseDoc(mainFrame), mainFrame);
+                        pdf2Convert2JPEG.save(doc2Convert2JPEG);
 
 
                         ProgressMonitor progressMonitor = new ProgressMonitor(mainFrame,"File Loading",
-                                "Start loading...",0, pdf2RemovePages.getNumberOfPages()-1);
+                                "Start loading...",0, pdf2Convert2JPEG.getNumberOfPages()-1);
                         progressMonitor.setMillisToDecideToPopup(50);
                         progressMonitor.setMillisToPopup(50);
-                        pages2RemoveList = new ArrayList<>();
-                        for (int i = 0; i < pdf2RemovePages.getNumberOfPages(); i++) {
+                        pages2ConvertList= new ArrayList<>();
+                        for (int i = 0; i < pdf2Convert2JPEG.getNumberOfPages(); i++) {
 
-                            FilePreviewPanel filePreviewPanel = new FilePreviewPanel(doc2RemovePages, mainFrame, i);
+                            FilePreviewPanel filePreviewPanel = new FilePreviewPanel(doc2Convert2JPEG, mainFrame, i);
 
 
                             //setting the interaction when user hovers over the filePreviewPanel (setting red border)
@@ -125,7 +136,7 @@ public class RemovePagesPanel extends JPanel  {
                                 @Override
                                 public void mouseEntered(MouseEvent e) {
                                     super.mouseEntered(e);
-                                    filePreviewPanel.setBorder(removeItemBorder);
+                                    filePreviewPanel.setBorder(convertItemBorder);
                                 }
                             });
                             //setting the interaction when user doesent hover over the filePreviewPanel anymore (remove border)
@@ -144,13 +155,13 @@ public class RemovePagesPanel extends JPanel  {
                                 @Override
                                 public void mouseClicked(MouseEvent e) {
                                     super.mouseClicked(e);
-                                    if(!pages2RemoveList.get(finalI)){
+                                    if(!pages2ConvertList.get(finalI)){
                                         filePreviewPanel.setBackground(Color.red);
-                                        pages2RemoveList.set(finalI,true);
+                                        pages2ConvertList.set(finalI,true);
                                     }else{
 
                                         filePreviewPanel.setBackground(null);
-                                        pages2RemoveList.set(finalI,false);
+                                        pages2ConvertList.set(finalI,false);
                                     }
 
                                 }
@@ -160,10 +171,10 @@ public class RemovePagesPanel extends JPanel  {
                             //adding the processed pages as a preview Panel to the fileHandlerPanel
                             fileHandlerPanel.add(filePreviewPanel);
                             //updating the list for page removal for this page
-                            pages2RemoveList.add(false);
+                            pages2ConvertList.add(false);
                             progressMonitor.setNote("Loading page: "+i);
                             progressMonitor.setProgress(i);
-                            pdf2RemovePages.close();
+                            pdf2Convert2JPEG.close();
                         }
                         fileHandlerPanel.add(Box.createVerticalGlue());
                         JOptionPane.showMessageDialog(mainFrame,"Loading successful!");
@@ -172,6 +183,8 @@ public class RemovePagesPanel extends JPanel  {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                    comboSelectionPanel.setVisible(true);
+                    conversionButtonCarrier.setVisible(true);
                     fileHandlerPanel.validate();
                     fileHandlerScroller.validate();
                     mainFrame.validate();
