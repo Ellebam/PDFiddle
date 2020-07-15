@@ -191,50 +191,37 @@ public class Driver {
     public void convertPDF2JPEGs(File Doc2Convert2JPEG, String destinationDirectory,
                                  ArrayList<Boolean> Pages2Convert, float DPI, MainFrame mainFrame) {
 
-        /*ArrayList<Boolean> Pages2Convert = new ArrayList<>();
-        Pages2Convert.add(true);
-        for(int i =0; i<9;i++){
-            Pages2Convert.add(false);
-        }
-        Pages2Convert.add(true);
-        Pages2Convert.add(false);
-
-        driver.convertPDF2JPEGs(driver.chooseDoc(),driver.chooseSaveDirectory(),Pages2Convert,400);*/
-        //try {
+        Thread conversionThread = new Thread(() -> {
             try {
                 PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG, MemoryUsageSetting.setupTempFileOnly());
                 int numberOfPages = extractionPDF.getNumberOfPages();
                 PDFRenderer renderer = new PDFRenderer(extractionPDF);
-                for (int i = 0; i < numberOfPages; i++) {
-                    if (Pages2Convert.get(i)) {
-                        BufferedImage image = renderer.renderImageWithDPI(i, DPI, ImageType.RGB);
-                        ImageIO.write(image, "JPEG", new File(
-                                destinationDirectory + "\\converted Image" + i + ".jpeg"));
-                    }
-                }
-                extractionPDF.close();
-            /*} catch (InvalidPasswordException invalidPasswordException) {
-                PDDocument extractionPDF = PDDocument.load(Doc2Convert2JPEG,
-                        JOptionPane.showInputDialog(null,
-                                Doc2Convert2JPEG.getName() + " is password protected. " +
-                                        "Please enter the password to open the document"),
-                        MemoryUsageSetting.setupTempFileOnly());
-                int numberOfPages = extractionPDF.getNumberOfPages();
-                System.out.println(numberOfPages);
-                PDFRenderer renderer = new PDFRenderer(extractionPDF);
-                for (int i = 0; i < numberOfPages; i++) {
-                    if (Pages2Convert.get(i)) {
-                        BufferedImage image = renderer.renderImageWithDPI(i, DPI, ImageType.RGB);
-                        ImageIO.write(image, "JPEG", new File(
-                                destinationDirectory + "\\converted Image" + i + ".jpeg"));
-                    }
-                }
-                extractionPDF.close();
-            }*/
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
+                ProgressMonitor progressMonitor = new ProgressMonitor(mainFrame, "JPEG Conversion",
+                        "Start conversion...", 0, extractionPDF.getNumberOfPages() - 1);
+                progressMonitor.setMillisToDecideToPopup(50);
+                progressMonitor.setMillisToPopup(50);
+                for (int i = 0; i < numberOfPages; i++) {
+                    if (Pages2Convert.get(i)) {
+                        progressMonitor.setNote("Converting page: "+i);
+                        progressMonitor.setProgress(i);
+                        BufferedImage image = renderer.renderImageWithDPI(i, DPI, ImageType.RGB);
+                        ImageIO.write(image, "JPEG", new File(
+                                destinationDirectory + "\\converted Image" + i + ".jpeg"));
+
+                    }
+                }
+                extractionPDF.close();
+                JOptionPane.showMessageDialog(mainFrame,"Conversion successful!");
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(mainFrame, "Error while converting Pages!");
+            }
+
+        });
+
+        conversionThread.start();
     }
 
     /**
@@ -252,27 +239,33 @@ public class Driver {
                                    ArrayList<Boolean> Pages2Remove, MainFrame mainFrame) {
 
 
-        try {
+
+            try {
+
                 PDDocument pageRemovalPDF = PDDocument.load(Doc2RemovePagesFrom);
                 int numberOfPages = pageRemovalPDF.getNumberOfPages();
                 System.out.println(numberOfPages);
+
+
                 while (Pages2Remove.contains(true)) {
                     for (int i = 0; i < numberOfPages; i++) {
                         if (Pages2Remove.get(i)) {
                             pageRemovalPDF.removePage(i);
                             Pages2Remove.remove(i);
 
+
                             break;
                         }
                     }
                 }
                 pageRemovalPDF.save(destinationDirectory + "\\PagesRemoved.pdf");
-                JOptionPane.showMessageDialog(mainFrame,"Page removal successful!");
+                JOptionPane.showMessageDialog(mainFrame, "Page removal successful!");
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(mainFrame, "Error while removing pages!");
-        }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(mainFrame, "Error while removing pages!");
+            }
+
     }
 
 
@@ -289,7 +282,7 @@ public class Driver {
 
 
         ArrayList<Integer> pageCounter = new ArrayList<>(); //used for keeping track of the page at work
-        ArrayList<Integer> noOfPages = new ArrayList<>();  // used for getting the total number of pages dinamically
+        ArrayList<Integer> noOfPages = new ArrayList<>();  // used for getting the total number of pages dynamically
 
         //used for tracking if the user wants to stop the compression
         ArrayList<Boolean> exitList = new ArrayList<>();

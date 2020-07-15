@@ -6,6 +6,7 @@ import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.colors.HighlightColor;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import com.ellebam.pdfiddle.guielements.layouts.WrapLayout;
+import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javax.swing.*;
@@ -36,6 +37,7 @@ public class ConvertPDF2JPEGsPanel extends JPanel {
     private String[]                        conversionQualityCombo          = {"Low","Medium","High"};
 
 
+
     public ConvertPDF2JPEGsPanel(MainFrame mainFrame) {
         convertPDF2JPEGsPanel = this;
 
@@ -61,8 +63,8 @@ public class ConvertPDF2JPEGsPanel extends JPanel {
         comboSelectionPanel.setVisible(false);
 
         JPanel conversionButtonCarrier = new JPanel();
-        ControlButtonCarrier conversionButtons = new ControlButtonCarrier("Select All");
-        conversionButtons.setBackButtonText("Deselect All");
+        ControlButtonCarrierPlus conversionButtons = new ControlButtonCarrierPlus("Select All", "Deselect");
+
         conversionButtonCarrier.add(conversionButtons);
         conversionButtonCarrier.setPreferredSize(new Dimension(fileHandlerScroller.getWidth(),50));
         conversionButtonCarrier.setVisible(false);
@@ -88,6 +90,17 @@ public class ConvertPDF2JPEGsPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+
+                String saveDirectory = pdf2JPEGDriver.chooseSaveDirectory((mainFrame));
+
+                if(comboSelectionPanel.getComboBox().getSelectedIndex()==0){
+                    pdf2JPEGDriver.convertPDF2JPEGs(doc2Convert2JPEG,
+                            saveDirectory,pages2ConvertList,150,mainFrame);
+                }else if(comboSelectionPanel.getComboBox().getSelectedIndex()==1){
+                    pdf2JPEGDriver.convertPDF2JPEGs(doc2Convert2JPEG,saveDirectory,pages2ConvertList,200,mainFrame);
+                }else if(comboSelectionPanel.getComboBox().getSelectedIndex()==2) {
+                    pdf2JPEGDriver.convertPDF2JPEGs(doc2Convert2JPEG, saveDirectory, pages2ConvertList, 300, mainFrame);
+                }
 
             }
         });
@@ -196,5 +209,35 @@ public class ConvertPDF2JPEGsPanel extends JPanel {
                 operationThread.start();
             }
         });
+
+        conversionButtons.getFirstOperatorButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                for (int i = 0; i<pdf2Convert2JPEG.getNumberOfPages();i++){
+                    fileHandlerPanel.getComponent(i).setBackground(Color.red);
+                    pages2ConvertList.set(i,true);
+                    fileHandlerPanel.validate();
+                    fileHandlerScroller.validate();
+                    mainFrame.validate();
+
+                }
+            }
+        });
+
+        conversionButtons.getSecondOperatorButton().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                for(int i=0; i<pdf2Convert2JPEG.getNumberOfPages();i++){
+                    fileHandlerPanel.getComponent(i).setBackground(null);
+                    pages2ConvertList.set(i,false);
+                    fileHandlerPanel.validate();
+                    fileHandlerScroller.validate();
+                    mainFrame.validate();
+                }
+            }
+        });
+
     }
 }
