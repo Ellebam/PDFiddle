@@ -9,7 +9,7 @@ public class MainFrame extends JFrame {
     public MainFrame (){
         super("PDFiddle 1.0");
         mainFrame=this;
-        setSize(850,520);
+        setSize(850,620);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);

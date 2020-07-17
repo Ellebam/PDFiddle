@@ -12,6 +12,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -20,18 +22,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
+
+/*
+ * This class represents the panel for converting single JPEG Files into single PDF Files or one merged PDF File
+ */
 public class ConvertJPEG2PDFPanel extends JPanel {
 
     private ConvertJPEG2PDFPanel            convertJPEG2PDFPanel;
     private SelectDocPseudoButton           selectDocPseudoButton           = new SelectDocPseudoButton();
     private ArrayList<File>                 listOfJPEGs                     = new ArrayList<>();
-    private PDDocument                      pdf2Convert2JPEG;
     private WrapLayout                      wrapLayout                      = new WrapLayout();
     private JPanel                          fileHandlerPanel                = new JPanel(wrapLayout);
     private JScrollPane                     fileHandlerScroller             = new JScrollPane(fileHandlerPanel);
     private Driver                          JPEG2PDFDriver                  = new Driver();
-    private Boolean                         mergeFilesBool                  = new Boolean(false);
-
+    private Boolean                         mergeFilesBool                  = Boolean.FALSE;
+    private Checkbox                        mergeFilesCheckBox;
+    private JPanel                          mergeFilesCheckBoxPanel;
 
     public ConvertJPEG2PDFPanel(MainFrame mainFrame){
         convertJPEG2PDFPanel = this;
@@ -52,6 +58,22 @@ public class ConvertJPEG2PDFPanel extends JPanel {
         fileHandlerPanel.setSize(fileHandlerScroller.getSize());
         fileHandlerScroller.setBorder(null);
 
+
+        /*
+          Checkbox changes the status of mergeFilesBool which is used to determine wether the loaded JPEG files have to be
+          merged after being converted
+         */
+        mergeFilesCheckBox = new Checkbox("Merge Files");
+        mergeFilesCheckBox.addItemListener(e -> {
+            mergeFilesBool = !mergeFilesBool; //if status is changed change mergeFilesBool
+            System.out.print(mergeFilesBool);
+        });
+        mergeFilesCheckBoxPanel = new JPanel();
+        mergeFilesCheckBoxPanel.add(mergeFilesCheckBox);
+        mergeFilesCheckBoxPanel.setAlignmentX(CENTER_ALIGNMENT);
+
+
+
         //setting up the controlButtons
         ControlButtonCarrier controlButtonCarrier = new ControlButtonCarrier("Convert");
         controlButtonCarrier.setAlignmentY(BOTTOM_ALIGNMENT);
@@ -64,15 +86,29 @@ public class ConvertJPEG2PDFPanel extends JPanel {
                 mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
             }
         });
+        /*
+         * operator button fires the convertJPEG2PDF() method from Driver class
+         */
+        controlButtonCarrier.operatorButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String destinationDirectory = JPEG2PDFDriver.chooseSaveDirectory(mainFrame);
+                JPEG2PDFDriver.convertJPEG2PDF(listOfJPEGs,destinationDirectory,mergeFilesBool,mainFrame);
+                mainFrame.setAndAddCurrentPanel(new ConvertJPEG2PDFPanel(mainFrame));
+            }
+        });
 
 
         convertJPEG2PDFPanel.add(headerPanel);
         convertJPEG2PDFPanel.add(selectCarrierPanel);
         convertJPEG2PDFPanel.add(Box.createRigidArea(new Dimension(10,10)));
+        convertJPEG2PDFPanel.add(mergeFilesCheckBoxPanel);
         convertJPEG2PDFPanel.add(fileHandlerScroller);
         convertJPEG2PDFPanel.add(Box.createVerticalGlue());
         convertJPEG2PDFPanel.add(controlButtonCarrier);
         fileHandlerScroller.setVisible(false);
+        mergeFilesCheckBoxPanel.setVisible(false);
 
         selectDocPseudoButton.addMouseListener((new MouseAdapter(){
             @Override
@@ -99,6 +135,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
     public void displayJPEGFiles(MainFrame mainFrame) {
         if(listOfJPEGs.size() >0) {
             fileHandlerScroller.setVisible(true);
+            mergeFilesCheckBoxPanel.setVisible(true);
         }else{
             fileHandlerPanel.removeAll();
             convertJPEG2PDFPanel.repaint();}
@@ -112,6 +149,12 @@ public class ConvertJPEG2PDFPanel extends JPanel {
         convertJPEG2PDFPanel.revalidate();
         convertJPEG2PDFPanel.setVisible(true);
     }
+
+    /*
+     * This inner class handles represents the Objects displayed by displayJPEGFiles(). It consists of JPanels which
+     * have the JPEG Files images as a small icon for preview. It also has 3 Buttons for changing the order of the
+     * loaded JPEG Files in listOfJPEGs ( and also the order in which they are processed/merged).
+     */
     public class JPEGConversionDisplay extends JPanel{
         JPEGConversionDisplay jpegConversionDisplay;
         private Color                           fileDisplayColor                = new SecondaryColor2();
@@ -120,7 +163,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
         private Border                          border                  = BorderFactory.createLineBorder(
                                                                         Color.ORANGE,2,true);
         private JPanel                          filePreviewPanel;
-    
+
     public JPEGConversionDisplay(ArrayList<File> listOfJPEGs, int JPEGListIndex, MainFrame mainFrame ){
         
         jpegConversionDisplay = this;
@@ -129,7 +172,10 @@ public class ConvertJPEG2PDFPanel extends JPanel {
         
         jpegConversionDisplay.setLayout(new BoxLayout(jpegConversionDisplay,BoxLayout.Y_AXIS));
 
-
+        /*
+         * setting up the control buttons for each single display Object and its core functionality (Arrow buttons changing
+         * the order of the entries, cancel button removing item from listofJPEGs
+         */
         JPanel cancelButtonPanel = new JPanel();
         addIcons(cancelButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/cancel_icon.png");
 
@@ -139,7 +185,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
         JPanel rightButtonPanel = new JPanel();
         addIcons(rightButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/right-arrow_icon.png");
 
-        /**
+        /*
          *Button for moving Object associated with this panel up in the corresponding ArrayList. Other MouseListeners
          * are used to highlight button when mouse is hovering over it
          */
@@ -167,7 +213,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
             }
         }));
 
-        /**
+        /*
          *Button for moving Object associated with this panel down in the corresponding ArrayList. Other MouseListeners
          *  are used to highlight button when mouse is hovering over it
          */
@@ -195,7 +241,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
             }
         }));
 
-        /**
+        /*
          *Button for removing Object associated with this panel from the corresponding ArrayList. Other MouseListeners
          * are used to highlight button when mouse is hovering over it
          */
@@ -248,9 +294,13 @@ public class ConvertJPEG2PDFPanel extends JPanel {
             }
         }
 
+        /**
+         * same method as addIcons() but with different scaling
+         * @param iconCarrier the image carrier JPanel
+         * @param iconDirectory saving directory of the .jpeg file (taken from listOfJPEGs)
+         */
         public void addPreviewIcons(JPanel iconCarrier, String iconDirectory) {
             try {
-                //String previewFileDirectory = previewFile.getAbsolutePath();
                 BufferedImage IconPNG = ImageIO.read(new File(iconDirectory));
                 ImageIcon icon = new ImageIcon(IconPNG);
                 JLabel iconLabel = new JLabel(scaleImage(icon, 180, 180));

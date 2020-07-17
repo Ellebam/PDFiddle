@@ -140,7 +140,7 @@ public class Driver {
                 for (int u = 0; u < mergeList.size(); u++) {
                     System.out.println(mergeList.get(u).getName());
                 }
-                tempDriver.mergePDFDocs(destinationDirectory,"", mergeList, mainFrame);
+                tempDriver.mergePDFDocsNoMessage(destinationDirectory,"", mergeList, mainFrame);
 
 
                 for (int i = 0; i < listOfJPEGs.size(); i++) {
@@ -172,8 +172,10 @@ public class Driver {
                 }
 
             }
+            JOptionPane.showMessageDialog(mainFrame,"Files successfully converted!");
         } catch (Exception ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame,"Error while converting files!!");
         }
     }
 
@@ -286,11 +288,11 @@ public class Driver {
 
         //used for tracking if the user wants to stop the compression
         ArrayList<Boolean> exitList = new ArrayList<>();
-        boolean exit = new Boolean(false);
+        boolean exit = Boolean.FALSE;
         exitList.add(exit);
 
 
-        /**This is the first of two threads. This one (t1) takes the input file (Doc2Compress) and turns its single pages
+        /*This is the first of two threads. This one (t1) takes the input file (Doc2Compress) and turns its single pages
          * into buffered images with low quality. It will then merge all pages to one PDDocument again and save it as a
          * pdf file. It will stop the main for loop (compressing all pages) when the boolean in exitList is turned to
          * "true" by the other thread (t2)
@@ -348,7 +350,7 @@ public class Driver {
         }
         });
 
-        /** this thread manages the dispaly of the ProgressMonitor. It will get the page number of the document to
+        /* this thread manages the dispaly of the ProgressMonitor. It will get the page number of the document to
          *  compress and build a screen showing the compression progress of the process. If the user selects "cancel"
          *  on the ProgressMonitor the exitList will be edited so that the other thread is stopped.
          *
@@ -373,7 +375,7 @@ public class Driver {
                 System.out.println("for: " +i);
                 if(progressMonitor.isCanceled()){
                     exitList.remove(0);
-                    exitList.add(new Boolean(true));
+                    exitList.add(Boolean.TRUE);
                     System.out.println("thread cancelled");
                     break;
                 }
