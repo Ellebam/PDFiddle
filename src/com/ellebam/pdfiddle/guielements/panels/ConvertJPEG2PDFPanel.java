@@ -86,8 +86,8 @@ public class ConvertJPEG2PDFPanel extends JPanel {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(mainFrame, "Error while loading File!");
                 }
-                System.out.println(listOfJPEGs);
-                displayMergeFiles(mainFrame);
+                System.out.println(listOfJPEGs.get(0).getAbsolutePath());
+                displayJPEGFiles(mainFrame);
             }
         }));
     }
@@ -96,7 +96,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
      * For every selected file it will create a custom Panel with the name of the File
      * @param mainFrame mainFrame is needed so other methods or constructors utilizing this method can access mainframe
      */
-    public void displayMergeFiles(MainFrame mainFrame) {
+    public void displayJPEGFiles(MainFrame mainFrame) {
         if(listOfJPEGs.size() >0) {
             fileHandlerScroller.setVisible(true);
         }else{
@@ -105,62 +105,65 @@ public class ConvertJPEG2PDFPanel extends JPanel {
         fileHandlerPanel.removeAll();
         for(int i =0; i< listOfJPEGs.size();i++){
             JPanel carrier = new JPanel();
-            carrier.add(new ConvertJPEG2PDFPanel.JPEGCConversionDisplay(listOfJPEGs,i, mainFrame));
+            carrier.add(new JPEGConversionDisplay(listOfJPEGs,i, mainFrame));
             carrier.setAlignmentY(TOP_ALIGNMENT);
             fileHandlerPanel.add(carrier);
         }
         convertJPEG2PDFPanel.revalidate();
+        convertJPEG2PDFPanel.setVisible(true);
     }
-    public class JPEGCConversionDisplay extends JPanel{
-        JPEGCConversionDisplay                  jpegcConversionDisplay;
+    public class JPEGConversionDisplay extends JPanel{
+        JPEGConversionDisplay jpegConversionDisplay;
         private Color                           fileDisplayColor                = new SecondaryColor2();
         private Dimension                       arcs                            = new Dimension(30,30);
         private JPanel                          controlButtonPanel;
-        private Border border                  = BorderFactory.createLineBorder(Color.ORANGE,2,true);
+        private Border                          border                  = BorderFactory.createLineBorder(
+                                                                        Color.ORANGE,2,true);
+        private JPanel                          filePreviewPanel;
     
-    public JPEGCConversionDisplay (ArrayList<File> listOfJPEGs, int JPEGListIndex, MainFrame mainFrame ){
+    public JPEGConversionDisplay(ArrayList<File> listOfJPEGs, int JPEGListIndex, MainFrame mainFrame ){
         
-        jpegcConversionDisplay                  = this;
+        jpegConversionDisplay = this;
         controlButtonPanel                      = new JPanel();
         
         
-        jpegcConversionDisplay.setLayout(new BoxLayout(jpegcConversionDisplay,BoxLayout.Y_AXIS));
+        jpegConversionDisplay.setLayout(new BoxLayout(jpegConversionDisplay,BoxLayout.Y_AXIS));
 
 
         JPanel cancelButtonPanel = new JPanel();
         addIcons(cancelButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/cancel_icon.png");
 
-        JPanel upButtonPanel = new JPanel();
-        addIcons(upButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/up-arrow_icon.png");
+        JPanel leftButtonPanel = new JPanel();
+        addIcons(leftButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/left-arrow_icon.png");
 
-        JPanel downButtonPanel = new JPanel();
-        addIcons(downButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/down-arrow_icon.png");
+        JPanel rightButtonPanel = new JPanel();
+        addIcons(rightButtonPanel, "/com/ellebam/pdfiddle/Icons/Vectors Market/right-arrow_icon.png");
 
         /**
          *Button for moving Object associated with this panel up in the corresponding ArrayList. Other MouseListeners
          * are used to highlight button when mouse is hovering over it
          */
-        controlButtonPanel.add(upButtonPanel);
-        upButtonPanel.setOpaque(false);
-        upButtonPanel.addMouseListener((new MouseAdapter() {
+        controlButtonPanel.add(leftButtonPanel);
+        leftButtonPanel.setOpaque(false);
+        leftButtonPanel.addMouseListener((new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 Collections.swap(listOfJPEGs,JPEGListIndex,JPEGListIndex-1);
-                displayMergeFiles(mainFrame);
+                displayJPEGFiles(mainFrame);
             }
         }));
-        upButtonPanel.addMouseListener((new MouseAdapter(){
+        leftButtonPanel.addMouseListener((new MouseAdapter(){
             @Override
             public void mouseEntered (MouseEvent evt){
-                upButtonPanel.setBorder(border);
+                leftButtonPanel.setBorder(border);
 
             }
         }));
-        upButtonPanel.addMouseListener((new MouseAdapter(){
+        leftButtonPanel.addMouseListener((new MouseAdapter(){
             @Override
             public void mouseExited (MouseEvent evt){
-                upButtonPanel.setBorder(null);
+                leftButtonPanel.setBorder(null);
             }
         }));
 
@@ -168,27 +171,27 @@ public class ConvertJPEG2PDFPanel extends JPanel {
          *Button for moving Object associated with this panel down in the corresponding ArrayList. Other MouseListeners
          *  are used to highlight button when mouse is hovering over it
          */
-        controlButtonPanel.add(downButtonPanel);
-        downButtonPanel.setOpaque(false);
-        downButtonPanel.addMouseListener((new MouseAdapter() {
+        controlButtonPanel.add(rightButtonPanel);
+        rightButtonPanel.setOpaque(false);
+        rightButtonPanel.addMouseListener((new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 Collections.swap(listOfJPEGs,JPEGListIndex,JPEGListIndex+1);
-                displayMergeFiles(mainFrame);
+                displayJPEGFiles(mainFrame);
             }
         }));
-        downButtonPanel.addMouseListener((new MouseAdapter(){
+        rightButtonPanel.addMouseListener((new MouseAdapter(){
             @Override
             public void mouseEntered (MouseEvent evt){
-                downButtonPanel.setBorder(border);
+                rightButtonPanel.setBorder(border);
 
             }
         }));
-        downButtonPanel.addMouseListener((new MouseAdapter(){
+        rightButtonPanel.addMouseListener((new MouseAdapter(){
             @Override
             public void mouseExited (MouseEvent evt){
-                downButtonPanel.setBorder(null);
+                rightButtonPanel.setBorder(null);
             }
         }));
 
@@ -203,7 +206,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 listOfJPEGs.remove(JPEGListIndex);
-                displayMergeFiles(mainFrame);
+                displayJPEGFiles(mainFrame);
             }
         }));
         cancelButtonPanel.addMouseListener((new MouseAdapter(){
@@ -220,11 +223,14 @@ public class ConvertJPEG2PDFPanel extends JPanel {
             }
         }));
         
-        FilePreviewPanel filePreviewPanel = new FilePreviewPanel(listOfJPEGs.get(JPEGListIndex),mainFrame,0);
+        
+        filePreviewPanel = new JPanel();
+        addPreviewIcons(filePreviewPanel,listOfJPEGs.get(JPEGListIndex).getAbsolutePath());
         
         
-        jpegcConversionDisplay.add(controlButtonPanel);
-        jpegcConversionDisplay.add(filePreviewPanel);
+        
+        jpegConversionDisplay.add(controlButtonPanel);
+        jpegConversionDisplay.add(filePreviewPanel);
     }
         /**
          * method for adding icon Images to a new Icon Object and adding that object to a existing Icon carrier JPanel
@@ -236,6 +242,18 @@ public class ConvertJPEG2PDFPanel extends JPanel {
                 BufferedImage IconPNG = ImageIO.read(getClass().getResource(iconDirectory));
                 ImageIcon icon = new ImageIcon(IconPNG);
                 JLabel iconLabel = new JLabel(scaleImage(icon, 30, 25));
+                iconCarrier.add(iconLabel);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        public void addPreviewIcons(JPanel iconCarrier, String iconDirectory) {
+            try {
+                //String previewFileDirectory = previewFile.getAbsolutePath();
+                BufferedImage IconPNG = ImageIO.read(new File(iconDirectory));
+                ImageIcon icon = new ImageIcon(IconPNG);
+                JLabel iconLabel = new JLabel(scaleImage(icon, 180, 180));
                 iconCarrier.add(iconLabel);
             } catch (Exception ex) {
                 ex.printStackTrace();
