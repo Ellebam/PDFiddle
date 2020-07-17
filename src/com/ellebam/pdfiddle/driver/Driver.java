@@ -46,7 +46,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new ConvertPDF2JPEGsPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new ConvertJPEG2PDFPanel(mainFrame));
 
     }
 

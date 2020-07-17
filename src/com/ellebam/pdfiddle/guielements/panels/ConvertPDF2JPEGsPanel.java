@@ -6,7 +6,6 @@ import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.colors.HighlightColor;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import com.ellebam.pdfiddle.guielements.layouts.WrapLayout;
-import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javax.swing.*;
