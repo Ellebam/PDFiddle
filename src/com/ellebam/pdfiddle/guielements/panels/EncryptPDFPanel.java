@@ -5,6 +5,7 @@ import com.ellebam.pdfiddle.guielements.MainFrame;
 import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +25,7 @@ public class EncryptPDFPanel extends JPanel {
     private Boolean overwriteSourceFileBool = Boolean.FALSE;
     private Checkbox overwriteSourceFileCheckbox;
     private JPanel overwriteSourceFileCheckboxPanel;
+    private String sourceFileDirectory;
 
     public EncryptPDFPanel(MainFrame mainFrame) {
         encryptPDFPanel = this;
@@ -88,7 +90,7 @@ public class EncryptPDFPanel extends JPanel {
                      String userPassword = userPasswordField.getText();
 
                      encryptionDriver.encryptPDF(doc2Encrypt,overwriteSourceFileBool,
-                             authorPassword,userPassword,mainFrame);
+                             authorPassword,userPassword,mainFrame, sourceFileDirectory);
                      encryptPDFPanel.setVisible(false);
                      mainFrame.setAndAddCurrentPanel(new EncryptPDFPanel(mainFrame));
                  }
@@ -118,7 +120,10 @@ public class EncryptPDFPanel extends JPanel {
                 }
                 try{
                     doc2Encrypt = File.createTempFile("temp",null);
-                    PDF2Encrypt =encryptionDriver.handlePDFEncryption(encryptionDriver.chooseDoc(mainFrame),mainFrame);
+                    PDF2Encrypt =encryptPDFPanel.handlePDFEncryptionPlus(encryptionDriver.chooseDoc(mainFrame),
+                            mainFrame);
+
+
                     PDF2Encrypt.save(doc2Encrypt);
                     filePreviewPanel = new FilePreviewPanel(doc2Encrypt,mainFrame,0);
                     fileHandlerPanel.add(filePreviewPanel);
@@ -131,5 +136,46 @@ public class EncryptPDFPanel extends JPanel {
                 fileHandlerPanel.revalidate();
             }
         });
+    }
+    /**
+     * The same method as handlePDFEncryption() from Driver class  but only with an Update of a String representing the
+     * directory of the source file
+     * @param doc2Handle file which needs to be handled
+     * @param mainFrame parent frame
+     * @return
+     */
+    public PDDocument handlePDFEncryptionPlus(File doc2Handle, MainFrame mainFrame) {
+        PDDocument handledDoc = new PDDocument();
+        try {
+            try {
+                handledDoc = PDDocument.load(doc2Handle);
+                sourceFileDirectory = doc2Handle.getAbsolutePath();
+
+            } catch (InvalidPasswordException invalidPasswordException) {
+
+                handledDoc = PDDocument.load(doc2Handle,
+                        JOptionPane.showInputDialog(mainFrame,
+                                doc2Handle.getName() + " is password protected. " +
+                                        "Please enter the password to open the document"));
+                sourceFileDirectory = doc2Handle.getAbsolutePath();
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(mainFrame, "Error while loading file!");
+            }
+        } catch (InvalidPasswordException ex) {
+            ex.printStackTrace();
+
+            JOptionPane.showMessageDialog(mainFrame, "Password incorrect!");
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame, "Error while loading file!");
+        }
+
+        handledDoc.setAllSecurityToBeRemoved(true);
+        return  handledDoc;
+
+
     }
 }

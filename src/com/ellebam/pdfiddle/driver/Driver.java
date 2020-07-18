@@ -46,7 +46,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new EncryptPDFPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
 
     }
 
@@ -75,7 +75,7 @@ public class Driver {
     }
 
     public void encryptPDF(File Doc2Encrypt, Boolean overwriteSourceFile, String authorPassword, String userPassword,
-                           MainFrame mainFrame) {
+                           MainFrame mainFrame,String sourceFileDirectory) {
         try {
             Driver tempoDriver = new Driver();
             PDDocument PDF2Encrypt = PDDocument.load(Doc2Encrypt);
@@ -85,7 +85,7 @@ public class Driver {
             spp.setPermissions(accessPermission);
             PDF2Encrypt.protect(spp);
             if (overwriteSourceFile) {
-                PDF2Encrypt.save(Doc2Encrypt.getAbsolutePath());
+                PDF2Encrypt.save(sourceFileDirectory);
             } else {
                 PDF2Encrypt.save(tempoDriver.chooseSaveDirectory(mainFrame) + "\\EncryptedPDF.pdf");
             }
@@ -598,12 +598,18 @@ public class Driver {
         return stringRange;
     }
 
+    /**
+     * This method handles the Encryption of PDF Files before processing through other methods. It takes a file and
+     * loads a PDDocument which is resaved as a temporal file without encryption
+     * @param doc2Handle file which needs to be handled
+     * @param mainFrame parent frame
+     * @return PDDOcument with removed encryption
+     */
     public PDDocument handlePDFEncryption(File doc2Handle, MainFrame mainFrame) {
         PDDocument handledDoc = new PDDocument();
         try {
             try {
                 handledDoc = PDDocument.load(doc2Handle);
-
             } catch (InvalidPasswordException invalidPasswordException) {
 
                  handledDoc = PDDocument.load(doc2Handle,
@@ -612,11 +618,16 @@ public class Driver {
                                         "Please enter the password to open the document"));
 
 
+
             } catch (Exception ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(mainFrame, "Password incorrect!");
+                JOptionPane.showMessageDialog(mainFrame, "Error while loading file!");
             }
-        } catch (Exception ex) {
+        } catch (InvalidPasswordException ex) {
+            ex.printStackTrace();
+
+            JOptionPane.showMessageDialog(mainFrame, "Password incorrect!");
+        }catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(mainFrame, "Error while loading file!");
         }
@@ -626,6 +637,8 @@ public class Driver {
 
 
     }
+
+
 
     public void changeCurrentPanel (JPanel newPanel, MainFrame mainFrame){
         mainFrame.getCurrentPanel().setVisible(false);
