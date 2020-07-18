@@ -46,7 +46,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new ConvertJPEG2PDFPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new EncryptPDFPanel(mainFrame));
 
     }
 
@@ -90,8 +90,10 @@ public class Driver {
                 PDF2Encrypt.save(tempoDriver.chooseSaveDirectory(mainFrame) + "\\EncryptedPDF.pdf");
             }
             PDF2Encrypt.close();
+            JOptionPane.showMessageDialog(mainFrame,"Encryption completed!");
         } catch (Exception ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(mainFrame, "Error while encrypting file!");
         }
     }
 

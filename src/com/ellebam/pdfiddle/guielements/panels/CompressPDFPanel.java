@@ -9,12 +9,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * This class represents the CompressPDFPanel where a file is compressed and saved again.
@@ -66,7 +64,7 @@ public class CompressPDFPanel extends JPanel {
         });
 
 
-        /**
+        /*
          * selecting the operatorbutton will trigger the compressPDF procedure with the selected comrpession quality
          */
         controlButtonCarrier.operatorButton.addMouseListener(new MouseAdapter()
@@ -96,7 +94,7 @@ public class CompressPDFPanel extends JPanel {
         compressPDFPanel.add(fileHandlerPanel);
         compressPDFPanel.add(controlButtonCarrier);
 
-/**
+/*
  * The selectDocPseudoButton also triggers the Document preview as a own Panel(icon).
  */
         selectDocPseudoButton.addMouseListener(new MouseAdapter() {
