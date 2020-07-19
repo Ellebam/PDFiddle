@@ -46,31 +46,25 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new DecryptPDFPanel(mainFrame));
 
     }
 
-    public void decryptPDF(File Doc2Decrypt, Boolean overwriteSourceFile, MainFrame mainFrame) {
+    public void decryptPDF(File Doc2Decrypt, Boolean overwriteSourceFile, MainFrame mainFrame, String sourceFileDirectory) {
         try {
             Driver temporalDriver = new Driver();
-            try {
                 PDDocument PDF2Decrypt = PDDocument.load(Doc2Decrypt);
-                JOptionPane.showMessageDialog(null, "Document not encrypted!");
-            } catch (InvalidPasswordException invalidPasswordException) {
-                PDDocument PDF2Decrypt = PDDocument.load(Doc2Decrypt,
-                        JOptionPane.showInputDialog(null,
-                                Doc2Decrypt.getName() + " is password protected. " +
-                                        "Please enter the password to open the document"));
                 PDF2Decrypt.setAllSecurityToBeRemoved(true);
                 if (overwriteSourceFile) {
-                    PDF2Decrypt.save(Doc2Decrypt.getAbsolutePath());
+                    PDF2Decrypt.save(sourceFileDirectory);
+                    JOptionPane.showMessageDialog(mainFrame,"File successfully decrypted!");
                 } else {
                     PDF2Decrypt.save(temporalDriver.chooseSaveDirectory(mainFrame) + "\\DecryptedPDF.pdf");
+                    JOptionPane.showMessageDialog(mainFrame,"File successfully decrypted!");
                 }
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error while decrypting!");
+            JOptionPane.showMessageDialog(mainFrame, "Error while decrypting!");
         }
     }
 
@@ -108,15 +102,6 @@ public class Driver {
      */
     public void convertJPEG2PDF(ArrayList<File> listOfJPEGs, String destinationDirectory,
                                 Boolean mergeFiles, MainFrame mainFrame) {
-       /* boolean mergeFiles =true;
-        ArrayList<File> listOfJPEGs = new ArrayList<>();
-        listOfJPEGs.add(driver.chooseDoc());
-        listOfJPEGs.add(driver.chooseDoc());
-        listOfJPEGs.add(driver.chooseDoc());
-        listOfJPEGs.add(driver.chooseDoc());
-        System.out.println(listOfJPEGs.get(0).getAbsolutePath());
-
-        driver.convertJPEG2PDF(listOfJPEGs,driver.chooseSaveDirectory(),mergeFiles);*/
 
         try {
             if (mergeFiles) {

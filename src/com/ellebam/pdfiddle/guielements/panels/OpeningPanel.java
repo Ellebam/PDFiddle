@@ -170,6 +170,16 @@ public class OpeningPanel extends JPanel {
             }
         });
 
+        //adding MouseListener for decryptPDF Pseudobutton
+        decryptPDFPseudoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                openingPanel.setVisible(false);
+                mainFrame.setAndAddCurrentPanel(new DecryptPDFPanel(mainFrame));
+            }
+        });
+
 
 
         JPanel carrierPanel = new JPanel();
