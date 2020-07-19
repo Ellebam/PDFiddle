@@ -1,5 +1,9 @@
-package com.ellebam.pdfiddle.driver;
+/*      Copyright [2020] [Arian Jamborzadeh]
+        SPDX-License-Identifier: Apache-2.0
+         */
 
+
+package com.ellebam.pdfiddle.driver;
 import com.ellebam.pdfiddle.guielements.MainFrame;
 import com.ellebam.pdfiddle.guielements.panels.*;
 import org.apache.pdfbox.io.MemoryUsageSetting;
@@ -46,7 +50,7 @@ public class Driver {
             ex.printStackTrace();
         }
         MainFrame mainFrame = new MainFrame();
-        mainFrame.setAndAddCurrentPanel(new DecryptPDFPanel(mainFrame));
+        mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
 
     }
 

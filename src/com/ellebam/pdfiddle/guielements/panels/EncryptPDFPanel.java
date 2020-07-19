@@ -1,3 +1,8 @@
+/*      Copyright [2020] [Arian Jamborzadeh]
+        SPDX-License-Identifier: Apache-2.0         */
+
+
+
 package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.driver.Driver;
@@ -13,6 +18,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
+
+//this class represents the Panel for encrypting PDF Files
 public class EncryptPDFPanel extends JPanel {
 
     private EncryptPDFPanel encryptPDFPanel;
@@ -26,6 +33,7 @@ public class EncryptPDFPanel extends JPanel {
     private Checkbox overwriteSourceFileCheckbox;
     private JPanel overwriteSourceFileCheckboxPanel;
     private String sourceFileDirectory;
+
 
     public EncryptPDFPanel(MainFrame mainFrame) {
         encryptPDFPanel = this;
@@ -73,9 +81,9 @@ public class EncryptPDFPanel extends JPanel {
                 super.mouseClicked(e);
 
                 JTextField authorPasswordField = new JTextField();
-                authorPasswordField.setPreferredSize(new Dimension(50,20));
+                authorPasswordField.setPreferredSize(new Dimension(50, 20));
                 JTextField userPasswordField = new JTextField();
-                userPasswordField.setPreferredSize(new Dimension(50,20));
+                userPasswordField.setPreferredSize(new Dimension(50, 20));
 
                 JPanel setPasswordsPanel = new JPanel();
                 setPasswordsPanel.add(new JLabel("Author Password: "));
@@ -83,20 +91,19 @@ public class EncryptPDFPanel extends JPanel {
                 setPasswordsPanel.add(Box.createHorizontalStrut(15));
                 setPasswordsPanel.add(new JLabel("User Password: "));
                 setPasswordsPanel.add(userPasswordField);
-                 int result = JOptionPane.showConfirmDialog(mainFrame,setPasswordsPanel,
-                         "Please enter the desired Author and User Passwords", JOptionPane.OK_CANCEL_OPTION);
-                 if (result==JOptionPane.OK_OPTION){
-                     String authorPassword = authorPasswordField.getText();
-                     String userPassword = userPasswordField.getText();
+                int result = JOptionPane.showConfirmDialog(mainFrame, setPasswordsPanel,
+                        "Please enter the desired Author and User Passwords", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    String authorPassword = authorPasswordField.getText();
+                    String userPassword = userPasswordField.getText();
 
-                     encryptionDriver.encryptPDF(doc2Encrypt,overwriteSourceFileBool,
-                             authorPassword,userPassword,mainFrame, sourceFileDirectory);
-                     encryptPDFPanel.setVisible(false);
-                     mainFrame.setAndAddCurrentPanel(new EncryptPDFPanel(mainFrame));
-                 }
+                    encryptionDriver.encryptPDF(doc2Encrypt, overwriteSourceFileBool,
+                            authorPassword, userPassword, mainFrame, sourceFileDirectory);
+                    encryptPDFPanel.setVisible(false);
+                    mainFrame.setAndAddCurrentPanel(new EncryptPDFPanel(mainFrame));
+                }
             }
         });
-
 
 
         encryptPDFPanel.add(headerPanel);
@@ -115,34 +122,46 @@ public class EncryptPDFPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
 
-                if (fileHandlerPanel.getComponentCount() > 1){
+
+                if (fileHandlerPanel.getComponentCount() > 1) {
                     fileHandlerPanel.remove(1);
                 }
-                try{
-                    doc2Encrypt = File.createTempFile("temp",null);
-                    PDF2Encrypt =encryptPDFPanel.handlePDFEncryptionPlus(encryptionDriver.chooseDoc(mainFrame),
+
+
+                try {
+                    doc2Encrypt = File.createTempFile("temp", null);
+                    PDF2Encrypt = encryptPDFPanel.handlePDFEncryptionPlus(encryptionDriver.chooseDoc(mainFrame),
                             mainFrame);
 
 
                     PDF2Encrypt.save(doc2Encrypt);
-                    filePreviewPanel = new FilePreviewPanel(doc2Encrypt,mainFrame,0);
+                    filePreviewPanel = new FilePreviewPanel(doc2Encrypt, mainFrame, 0);
                     fileHandlerPanel.add(filePreviewPanel);
                     PDF2Encrypt.close();
 
 
-                }catch(Exception ex){ex.printStackTrace();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
                 overwriteSourceFileCheckboxPanel.setVisible(true);
                 fileHandlerPanel.revalidate();
+
+
+
             }
-        });
+            });
+
+
+
+
+
     }
     /**
      * The same method as handlePDFEncryption() from Driver class  but only with an Update of a String representing the
      * directory of the source file
      * @param doc2Handle file which needs to be handled
      * @param mainFrame parent frame
-     * @return
+     * @return a handled document
      */
     public PDDocument handlePDFEncryptionPlus(File doc2Handle, MainFrame mainFrame) {
         PDDocument handledDoc = new PDDocument();

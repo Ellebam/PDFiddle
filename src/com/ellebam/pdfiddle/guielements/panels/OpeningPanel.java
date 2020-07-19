@@ -1,3 +1,7 @@
+/*      Copyright [2020] [Arian Jamborzadeh]
+        SPDX-License-Identifier: Apache-2.0
+        Icons made by <a href="https://www.flaticon.com/authors/freepik"  */
+
 package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.driver.Driver;
@@ -9,7 +13,6 @@ import com.ellebam.pdfiddle.guielements.labels.SmallLabel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

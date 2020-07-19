@@ -1,3 +1,7 @@
+/*      Copyright [2020] [Arian Jamborzadeh]
+        SPDX-License-Identifier: Apache-2.0
+        Icons made by <a href="https://www.flaticon.com/authors/vectors-market"  */
+
 package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.driver.Driver;
@@ -5,9 +9,7 @@ import com.ellebam.pdfiddle.guielements.MainFrame;
 import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor1;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
-import com.sun.scenario.effect.Merge;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.JOniException;
-import jdk.nashorn.internal.scripts.JO;
+
 
 
 import javax.imageio.ImageIO;
@@ -186,7 +188,7 @@ public class MergePDFPanel extends JPanel {
             pdf2MergeDisplay.add(Box.createHorizontalGlue());
 
 
-            /**
+            /*
              *Button for moving Object associated with this panel up in the corresponding ArrayList. Other MouseListeners
              * are used to highlight button when mouse is hovering over it
              */
@@ -214,7 +216,7 @@ public class MergePDFPanel extends JPanel {
                 }
             }));
 
-            /**
+            /*
              *Button for moving Object associated with this panel down in the corresponding ArrayList. Other MouseListeners
              *  are used to highlight button when mouse is hovering over it
              */
@@ -242,7 +244,7 @@ public class MergePDFPanel extends JPanel {
                 }
             }));
 
-            /**
+            /*
              *Button for removing Object associated with this panel from the corresponding ArrayList. Other MouseListeners
              * are used to highlight button when mouse is hovering over it
              */

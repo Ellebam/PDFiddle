@@ -1,3 +1,8 @@
+/*      Copyright [2020] [Arian Jamborzadeh]
+        SPDX-License-Identifier: Apache-2.0
+         */
+
+
 package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.driver.Driver;

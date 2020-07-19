@@ -1,3 +1,7 @@
+/*      Copyright [2020] [Arian Jamborzadeh]
+        SPDX-License-Identifier: Apache-2.0  */
+
+
 package com.ellebam.pdfiddle.guielements.panels;
 
 import com.ellebam.pdfiddle.driver.Driver;
@@ -11,9 +15,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.stream.IntStream;
+
 
 /**
  * This panel represents the Panel in which the user can split a PDF File into smaller PDFs. It uses the
@@ -65,7 +68,7 @@ public class SplitPDFPanel extends JPanel {
                 mainFrame.setAndAddCurrentPanel(new OpeningPanel(mainFrame));
             }
         });
-        /**
+        /*
          * The operator button triggers the whole routine to split a PDF-Document. It will get the number of selected
          * splitPointNumber from the ComboBox (displayed by selectPseudoButton) and ask the user about its desired split
          * points through a inputDialog

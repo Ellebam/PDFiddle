@@ -1,19 +1,20 @@
-package com.ellebam.pdfiddle.guielements.panels;
+/*      Copyright [2020] [Arian Jamborzadeh]
+        SPDX-License-Identifier: Apache-2.0
+        Icons made by <a href="https://www.flaticon.com/authors/vectors-market" */
 
+package com.ellebam.pdfiddle.guielements.panels;
 import com.ellebam.pdfiddle.driver.Driver;
 import com.ellebam.pdfiddle.guielements.MainFrame;
 import com.ellebam.pdfiddle.guielements.buttons.SelectDocPseudoButton;
 import com.ellebam.pdfiddle.guielements.colors.SecondaryColor2;
 import com.ellebam.pdfiddle.guielements.labels.HeaderLabel;
 import com.ellebam.pdfiddle.guielements.layouts.WrapLayout;
-import org.apache.pdfbox.pdmodel.PDDocument;
+
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
