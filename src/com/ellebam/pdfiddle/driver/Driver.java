@@ -561,14 +561,16 @@ public class Driver {
     }
 
     public File chooseDoc(MainFrame mainFrame) {
-        JFileChooser fileChoose = new JFileChooser("C:\\Arinhobag");
+        JFileChooser fileChoose = new JFileChooser();
+        fileChoose.setCurrentDirectory(new java.io.File("."));
         fileChoose.setDialogTitle("Choose a file");
         fileChoose.showOpenDialog(mainFrame);
         return fileChoose.getSelectedFile();
     }
 
     public String chooseSaveDirectory(MainFrame mainFrame) {
-        JFileChooser fileSave = new JFileChooser("C:\\Arinhobag");
+        JFileChooser fileSave = new JFileChooser();
+        fileSave.setCurrentDirectory(new java.io.File("."));
         fileSave.setDialogTitle("Choose a saving directory");
         fileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileSave.showOpenDialog(mainFrame);
@@ -636,9 +638,7 @@ public class Driver {
     }
 
 
-    public void displayUserMessage (String variableString,MainFrame mainFrame){
-        JOptionPane.showMessageDialog(mainFrame,variableString);
-    }
+
 
 
 

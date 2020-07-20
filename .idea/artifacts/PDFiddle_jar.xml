@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PDFiddle:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PDFiddle_jar</output-path>
+    <root id="archive" name="PDFiddle.jar">
+      <element id="module-output" name="PDFiddle" />
+      <element id="library" level="project" name="PDFBox" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/pdfbox/pdfbox-app/2.0.19/pdfbox-app-2.0.19.jar" path-in-jar="/" />
+      <element id="module-source" name="PDFiddle" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/com/ellebam/pdfiddle/Icons/Freepik" />
+    </root>
+  </artifact>
+</component>

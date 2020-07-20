@@ -237,7 +237,7 @@ public class OpeningPanel extends JPanel {
         try {
             BufferedImage IconPNG = ImageIO.read(getClass().getResource(iconDirectory));
             ImageIcon icon = new ImageIcon(IconPNG);
-            JLabel iconLabel = new JLabel(scaleImage(icon, 50, 50));
+            JLabel iconLabel = new JLabel(scaleImage(icon, 45, 45));
             pseudobutton.add(iconLabel);
         } catch (Exception ex) {
             ex.printStackTrace();
