@@ -562,7 +562,7 @@ public class Driver {
 
     public File chooseDoc(MainFrame mainFrame) {
         JFileChooser fileChoose = new JFileChooser();
-        fileChoose.setCurrentDirectory(new java.io.File("."));
+        fileChoose.setCurrentDirectory(null);
         fileChoose.setDialogTitle("Choose a file");
         fileChoose.showOpenDialog(mainFrame);
         return fileChoose.getSelectedFile();
@@ -570,7 +570,7 @@ public class Driver {
 
     public String chooseSaveDirectory(MainFrame mainFrame) {
         JFileChooser fileSave = new JFileChooser();
-        fileSave.setCurrentDirectory(new java.io.File("."));
+        fileSave.setCurrentDirectory(null);
         fileSave.setDialogTitle("Choose a saving directory");
         fileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileSave.showOpenDialog(mainFrame);
