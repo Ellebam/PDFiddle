@@ -101,19 +101,18 @@ public class RemovePagesPanel extends JPanel  {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                try {
+                    doc2RemovePages = File.createTempFile("temp", null);
+                    pdf2RemovePages = removalDriver.handlePDFEncryption(removalDriver.chooseDoc(mainFrame), mainFrame);
 
-
+                    pdf2RemovePages.save(doc2RemovePages);
+                }catch (Exception exec){exec.printStackTrace();}
 
                 Thread operationThread = new Thread(()-> {
                     if (fileHandlerPanel.getComponentCount() > 1) {
                         fileHandlerPanel.removeAll();
                     }
                     try {
-                        doc2RemovePages = File.createTempFile("temp", null);
-                        pdf2RemovePages = removalDriver.handlePDFEncryption(removalDriver.chooseDoc(mainFrame), mainFrame);
-                        pdf2RemovePages.save(doc2RemovePages);
-
-
                         ProgressMonitor progressMonitor = new ProgressMonitor(mainFrame,"File Loading",
                                 "Start loading...",0, pdf2RemovePages.getNumberOfPages()-1);
                         progressMonitor.setMillisToDecideToPopup(50);
@@ -175,6 +174,7 @@ public class RemovePagesPanel extends JPanel  {
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        removePagesPanel = new RemovePagesPanel(mainFrame);
                     }
                     fileHandlerPanel.validate();
                     fileHandlerScroller.validate();

@@ -123,7 +123,7 @@ public class ConvertJPEG2PDFPanel extends JPanel {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(mainFrame, "Error while loading File!");
                 }
-                System.out.println(listOfJPEGs.get(0).getAbsolutePath());
+
                 displayJPEGFiles(mainFrame);
             }
         }));

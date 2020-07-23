@@ -123,7 +123,11 @@ public class ConvertPDF2JPEGsPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-
+                try{
+                    doc2Convert2JPEG = File.createTempFile("temp", null);
+                    pdf2Convert2JPEG = pdf2JPEGDriver.handlePDFEncryption(pdf2JPEGDriver.chooseDoc(mainFrame), mainFrame);
+                    pdf2Convert2JPEG.save(doc2Convert2JPEG);
+                }catch(Exception exec){exec.printStackTrace();}
 
 
                 Thread operationThread = new Thread(()-> {
@@ -132,9 +136,7 @@ public class ConvertPDF2JPEGsPanel extends JPanel {
                     }
 
                     try {
-                        doc2Convert2JPEG = File.createTempFile("temp", null);
-                        pdf2Convert2JPEG = pdf2JPEGDriver.handlePDFEncryption(pdf2JPEGDriver.chooseDoc(mainFrame), mainFrame);
-                        pdf2Convert2JPEG.save(doc2Convert2JPEG);
+
 
 
                         ProgressMonitor progressMonitor = new ProgressMonitor(mainFrame,"File Loading",
