@@ -24,6 +24,7 @@ The following sections show step by step instructions for working with the appli
 
 
   ****************************************PDF MERGER****************************************
+  
   PDF Merger combines multiple PDF-Files into a single PDF-File containing all others. You can select your PDF-Files by clicking on the "select" button.
   You are not limited by the number of PDF-Documents you want to merge (a high number of files will take longer to merge though). Files are combined in the 
   order they are added to the merge list and are shown with full name in the panel. You can change the order of the single documents by simply clicking the
@@ -55,6 +56,8 @@ The following sections show step by step instructions for working with the appli
   "Documents\splitPDF.pdf")
   
   
+  
+  
   ****************************************PDF COMPRESSOR****************************************
   
   PDF Compressor decreases the memory usage of a selected PDF-File by decreasing the PDF-Documents image quality. After selecting the desired PDF-File by clicking the "select"       button the file is displayed as a preview. Also, a drag down option panel is displayed where you can choose the compression rate of the PDF-File (low = low compression rate = 
@@ -67,6 +70,8 @@ The following sections show step by step instructions for working with the appli
   
   
   After successful compression of the file a user message is displayed and the panel is refreshed.
+  
+  
   
   ****************************************Page REMOVER****************************************
   
@@ -99,8 +104,9 @@ The following sections show step by step instructions for working with the appli
   After successful conversion of files a user message is displayed and the panel is refreshed.
   
   
-  ****************************************PDF TO JPEG CONVERTER****************************************
   
+  
+  ****************************************PDF TO JPEG CONVERTER****************************************
   
   PDF to JPEG Converter converts a PDF-Document in single JPEG-Files. After selecting the desired PDF-File by clicking the "select" button the file is displayed as a 
   preview. Also, a drag down option panel is displayed where you can choose the quality of the JPEG files  you want to have. All pages of the PDF-Documents are shown as
@@ -116,6 +122,8 @@ The following sections show step by step instructions for working with the appli
   After successful conversion of files a user message is displayed and the panel is refreshed.
   
   
+  
+  
   ****************************************PDF ENCRYPTER****************************************
   
   PDF Encrypter is used to set a author and a user password for a PDF-Document. After selecting the desired PDF-File by clicking the "select" button the file is displayed   as a preview. PDF Encrypter is one of two only functionalities that lets you overwrite the selected source file (the other being PDF Decrypter). You can do that by 
@@ -128,6 +136,11 @@ The following sections show step by step instructions for working with the appli
   "Documents\encryptedPDF.pdf")
   
   
+  After successful encryption of files a user message is displayed and the panel is refreshed.
+  
+  
+  
+  
   ****************************************PDF DECRYPTER****************************************
   
   PDF Decrypter is used to remove  author and  user passwords for a PDF-Document. After selecting the desired PDF-File by clicking the "select" button the file is        displayed   as a preview. PDF Decrypter is one of two only functionalities that lets you overwrite the selected source file (the other being PDF Encrypter). You can do that by 
@@ -138,6 +151,9 @@ The following sections show step by step instructions for working with the appli
   Since this application was mainly designed for Windows this step differs on macOS. Choosing a folder in a directory will save the file in its PARENT Folder
   while naming the file after the choosen folder (e.g. choosing the Documents folder inside the Users folder will save the file inside the Users folder named 
   "Documents\decryptedPDF.pdf")
+  
+  
+  After successful decryption of files a user message is displayed and the panel is refreshed.
   
   
   
