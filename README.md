@@ -30,7 +30,7 @@ The following sections show step by step instructions for working with the appli
   "Up" and "Down" buttons on any file entry display item (click the "cancel" button for removing a file from the merge list).
   Clicking the "Merge" button will open a dialog where you can choose your desired saving directory. The file will be saved named "mergedPDF.pdf" in the folder 
   you have chosen.
-  !! ATTENTION macOS !!:
+  !! ATTENTION macOS Users !!:
   Since this application was mainly designed for Windows this step differs on macOS. Choosing a folder in a directory will save the file in its PARENT Folder
   while naming the file after the choosen folder (e.g. choosing the Documents folder inside the Users folder will save the file inside the Users folder named 
   "Documents\mergedPDF.pdf)
@@ -44,4 +44,28 @@ The following sections show step by step instructions for working with the appli
   PDF Splitter splits a PDF-Document in smaller PDF-Files. After selecting the desired PDF-File by clicking the "select" button the file is displayed as a 
   preview. Also, a drag down option panel is displayed where you can choose the number of split points you want to have (1 split point = 2 new PDF-Files,
   2 split points = 3 new PDF-Files, and so on). Choosing 0 the default 0 split points will produce a new PDF-File for every Page of the choosen PDF-Document.
+  After selecting 1 or more split points and clicking on the "Split" button you will be asked to set those points on your desired page for splitting the document in parts. 
+  The page the split point is set will be part of the first of two files on the sides of a split point. After selecting all split points a user message is shown to let you know 
+  about the status of the splitting. Saving folder selection takes place immediatly after selecting the "Split" button.
+  
+  !! ATTENTION macOS Users!!:
+  Since this application was mainly designed for Windows this step differs on macOS. Choosing a folder in a directory will save the file in its PARENT Folder
+  while naming the file after the choosen folder (e.g. choosing the Documents folder inside the Users folder will save the file inside the Users folder named 
+  "Documents\splitPDF.pdf)
+  
+  
+  ****************************************PDF COMPRESSOR****************************************
+  PDF Compressor decreases the memory usage of a selected PDF-File by decreasing the PDF-Documents image quality. After selecting the desired PDF-File by clicking the "select"       button the file is displayed as a preview. Also, a drag down option panel is displayed where you can choose the compression rate of the PDF-File (low = low compression rate = 
+  higher image quality = higher memory consumption of the processed file). Clicking the "Compress" button will open a dialog where you can choose your desired saving directory.     The  file will be saved named "compressedPDF.pdf"with the chosen compression rate in the folder you have chosen.
+  
+  !! ATTENTION macOS Users!!:
+  Since this application was mainly designed for Windows this step differs on macOS. Choosing a folder in a directory will save the file in its PARENT Folder
+  while naming the file after the choosen folder (e.g. choosing the Documents folder inside the Users folder will save the file inside the Users folder named 
+  "Documents\compressedPDF.pdf)
+  
+  ****************************************PDF COMPRESSOR****************************************
+  
+  
+  
+  
 
